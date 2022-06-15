@@ -7,6 +7,7 @@
 #include<mainscene.h>
 //////////游戏的初始界面//////////
 #include<aboutscene.h>
+////////游戏初始界面////////
 #include<mybutton.h>
 #include<QPainter>
 #include<QDebug>

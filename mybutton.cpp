@@ -1,6 +1,5 @@
+//////////封装出一个新的按钮类//////////
 #include "mybutton.h"
-#include<QDebug>
-#include<QIcon>
 MyButton::MyButton(QPushButton *parent) : QPushButton(parent)
 {
 

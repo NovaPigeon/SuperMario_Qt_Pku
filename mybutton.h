@@ -1,14 +1,15 @@
+//////////封装出一个新的按钮类//////////
 #ifndef MYBUTTON_H
 #define MYBUTTON_H
 
-#include <QWidget>
+#include<QWidget>
 #include<QString>
 #include<QPushButton>
-#include <QObject>
+#include<QObject>
 #include<QPropertyAnimation>
 #include<QEvent>
 #include<QTimer>
-//////////封装出一个新的按钮类//////////
+#include<QDebug>
 class MyButton : public QPushButton
 {
     Q_OBJECT

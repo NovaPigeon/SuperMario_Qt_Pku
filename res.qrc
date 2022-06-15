@@ -17,5 +17,6 @@
         <file>Image/background.png</file>
         <file>Image/moveleft.png</file>
         <file>Image/moveright.png</file>
+        <file>Image/pauseScene.png</file>
     </qresource>
 </RCC>

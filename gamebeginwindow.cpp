@@ -1,3 +1,4 @@
+////////游戏初始界面////////
 #include "gamebeginwindow.h"
 #include "ui_gamebeginwindow.h"
 gameBeginWindow::gameBeginWindow(QWidget *parent) :
