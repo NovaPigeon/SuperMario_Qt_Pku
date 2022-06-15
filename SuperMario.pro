@@ -31,7 +31,11 @@ SOURCES += \
     aboutscene.cpp \
     mario.cpp \
     brick.cpp \
-    mrushroom.cpp
+    mushroom.cpp \
+    mounster.cpp \
+    pipe.cpp \
+    castle.cpp \
+    pausescene.cpp
 
 HEADERS += \
         gamebeginwindow.h \
@@ -40,7 +44,11 @@ HEADERS += \
     aboutscene.h \
     mario.h \
     brick.h \
-    mrushroom.h
+    mushroom.h \
+    mounster.h \
+    pipe.h \
+    castle.h \
+    pausescene.h
 
 FORMS += \
         gamebeginwindow.ui \
