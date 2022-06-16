@@ -5,7 +5,3 @@ Mushroom::Mushroom()
 {
 
 }
-void Mushroom::MushroomMove()
-{
-
-}
