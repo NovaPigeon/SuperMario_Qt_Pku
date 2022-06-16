@@ -1,12 +1,28 @@
 ////////马里奥类////////
 #ifndef MARIO_H
 #define MARIO_H
-
+#include<QString>
 
 class Mario
 {
 public:
     Mario();
+    int x,y;//mario的绝对坐标
+    int windowX;//mario与窗口的相对坐标，实现地面的相对运动
+    int life;//mario的生命值
+    int walkState;//mario的行走状态，决定选用行走图片的哪一部分
+    int goundState;//地面的状态,主要目的是实现镜头跟随效果
+    int jumpHeight;//mario跳跃的最大高度
+    bool isDie;//mario是否死亡
+    bool canMove;//mario是否可以移动(用于体积检测）
+    bool isJump;//判断空格是否被按下
+    bool isJumpEnd;//判断跳跃是否结束,以防止二段跳
+    bool isSpaceRelease;//判断空格是否被松开，以检测滞空时间
+    QString direction;//mario朝向，并不意味着运动，左还是右
+    void MarioJump();//弹跳
+    void MarioMove(QString key);//水平移动
+    void MarioDie();//播放mario的死亡动画
+
 };
 
 #endif // MARIO_H
