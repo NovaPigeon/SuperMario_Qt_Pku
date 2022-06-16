@@ -1,6 +1,6 @@
-///////////游戏的关于界面///////////
 #include "aboutscene.h"
 #include "ui_aboutscene.h"
+#include<mybutton.h>
 AboutScene::AboutScene(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AboutScene)

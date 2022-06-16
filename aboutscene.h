@@ -4,7 +4,6 @@
 
 #include <QWidget>
 #include<QPainter>
-#include"mybutton.h"
 namespace Ui {
 class AboutScene;
 }
