@@ -32,10 +32,10 @@ SOURCES += \
     mario.cpp \
     brick.cpp \
     mushroom.cpp \
-    mounster.cpp \
     pipe.cpp \
     castle.cpp \
-    pausescene.cpp
+    pausescene.cpp \
+    monster.cpp
 
 HEADERS += \
         gamebeginwindow.h \
@@ -45,10 +45,10 @@ HEADERS += \
     mario.h \
     brick.h \
     mushroom.h \
-    mounster.h \
     pipe.h \
     castle.h \
-    pausescene.h
+    pausescene.h \
+    monster.h
 
 FORMS += \
         gamebeginwindow.ui \
