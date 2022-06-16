@@ -3,10 +3,11 @@
 #define MOUNSTER_H
 
 
-class Mounster
+class Monster
 {
 public:
-    Mounster();
+    Monster();
+    void MonsterMove();//移动
 };
 
 #endif // MOUNSTER_H

@@ -1,3 +1,4 @@
+/////////游戏的暂停菜单////////
 #include "pausescene.h"
 PauseScene::PauseScene()
 {
