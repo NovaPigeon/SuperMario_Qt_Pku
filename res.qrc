@@ -18,5 +18,22 @@
         <file>Image/moveleft.png</file>
         <file>Image/moveright.png</file>
         <file>Image/pauseScene.png</file>
+        <file>Image/back.png</file>
+        <file>Image/castle.png</file>
+        <file>Image/coin.png</file>
+        <file>Image/flag.png</file>
+        <file>Image/flag2.png</file>
+        <file>Image/FlagMary.png</file>
+        <file>Image/longpipe.png</file>
+        <file>Image/mariodie.png</file>
+        <file>Image/normalbrick.png</file>
+        <file>Image/brick2.png</file>
+        <file>Image/brick3.png</file>
+        <file>Image/mushroom.png</file>
+        <file>Image/score.png</file>
+        <file>Image/shortpipe.png</file>
+        <file>Image/time.png</file>
+        <file>Image/unknownbrick.png</file>
+        <file>Image/unknownbrickafter.png</file>
     </qresource>
 </RCC>

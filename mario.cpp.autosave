@@ -17,9 +17,8 @@ Mario::Mario()
     isSpaceRelease=true;//判断空格是否被松开，以检测滞空时间
     canMove=true;
 }
-void Mario::MarioJump()
+void Mario::MarioJump()//弹跳
 {
-    /*弹跳*/
 }
 void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的话，会导致mario在没有移动时移动
 {

@@ -140,6 +140,18 @@ void MainScene::paintEvent(QPaintEvent *ev)
     //绘制地面
     painter.drawPixmap(0,450,pixGround,mario->goundState,0,1000,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
+    for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
+    {
+        if (*(it->begin()) - mario->x > -50 && *(it->begin()) - mario->x < 1000)
+        {
+            if(*(it->begin()+2)==0 && *(it->begin()+3)==1)//如果该砖块是普通砖块且尚未被摧毁
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50, pixNormalBrick);
+            if(*(it->begin()+2)!=0 && *(it->begin()+3)==1)//如果该砖块是未知砖块且尚未被破坏
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50,pixUnknownBrick,brick->unknownState,0,50,40);
+            if(*(it->begin()+2)!=0 && *(it->begin()+3)==0)//如果该砖块是未知砖块且已被破坏
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50, pixUnknownBrickAfter);
+        }
+    }
     //绘制mario
     if(!mario->isDie)
     {
@@ -147,6 +159,10 @@ void MainScene::paintEvent(QPaintEvent *ev)
             painter.drawPixmap(mario->windowX,mario->y,pixMarioLeft,mario->walkState,0,45,45);
         else if(mario->direction=="right")
             painter.drawPixmap(mario->windowX,mario->y,pixMarioRight,mario->walkState,0,45,45);
+    }
+    else
+    {
+
     }
 
 }
