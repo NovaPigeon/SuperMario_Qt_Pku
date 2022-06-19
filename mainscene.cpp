@@ -150,7 +150,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制得分
     painter.drawText(10,90,"score:"+QString::number(score,'d',1));
     //绘制地面
-    painter.drawPixmap(-30,450,pixGround,mario->goundState,0,1030,50);//截取自goundX始长1000pix的图片，以营造出动画效果
+    painter.drawPixmap(0,450,pixGround,mario->goundState,0,1000,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
     for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
     {
@@ -279,9 +279,9 @@ void MainScene::CollisionCheckJumpUp()
             brickY=*(it->begin()+1)+40;//+40,为砖块底部的Y坐标
             brickType=*(it->begin()+2);
             brickState=*(it->begin()+3);
-            brickWindowX=brickX-mario->x;
+            brickWindowX=brickX-mario->x;//brick相对于屏幕的坐标
             dY=-mario->y+brickY;//800 390 450
-            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+40&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
+            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+35&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
             {
                 if(brickState==1)
                 {
@@ -325,7 +325,7 @@ void MainScene::CollisionCheckJumpDown()
             brickState=*(it->begin()+3);
             brickWindowX=brickX-mario->x;
             dY=-mario->y+brickY;//800 390 450
-            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+40&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
+            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+35&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
             {
                 if(brickState==1||(brickState==0&&brickType!=0))
                 {
@@ -355,11 +355,11 @@ void MainScene::CollisionCheckMove()
         //mario朝右时
         if(brickState==1||(brickState==0&&brickType!=0))
         {
-            if(mario->y>brickYup&&mario->y<brickYdown)
+            if(mario->y>=brickYup+10&&mario->y<=brickYdown-5)
             {
                 if(mario->direction=="right")
                 {
-                    if(mario->windowX+40<brickWindowX&&mario->windowX)
+                    if(mario->windowX+40<=brickWindowX-2&&mario->windowX+40>=brickWindowX-5-2)
                     {
                         mario->canMove=false;
                         return;
@@ -367,7 +367,7 @@ void MainScene::CollisionCheckMove()
                 }
                 if(mario->direction=="left")
                 {
-                    //if(dX>=30&&dX<=30+40)
+                    if(mario->windowX>=brickWindowX+35+2&&mario->windowX<=brickWindowX+40+2)
                     {
                         mario->canMove=false;
                         return;
