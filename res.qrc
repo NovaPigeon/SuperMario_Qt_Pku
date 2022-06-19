@@ -35,5 +35,6 @@
         <file>Image/time.png</file>
         <file>Image/unknownbrick.png</file>
         <file>Image/unknownbrickafter.png</file>
+        <file>Image/openScene.png</file>
     </qresource>
 </RCC>

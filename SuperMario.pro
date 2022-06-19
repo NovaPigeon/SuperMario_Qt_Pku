@@ -35,7 +35,8 @@ SOURCES += \
     pipe.cpp \
     castle.cpp \
     pausescene.cpp \
-    monster.cpp
+    monster.cpp \
+    gameoverscene.cpp
 
 HEADERS += \
         gamebeginwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     pipe.h \
     castle.h \
     pausescene.h \
-    monster.h
+    monster.h \
+    gameoverscene.h
 
 FORMS += \
         gamebeginwindow.ui \

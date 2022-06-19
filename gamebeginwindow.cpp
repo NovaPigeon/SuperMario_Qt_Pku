@@ -25,23 +25,26 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
         QTimer::singleShot(500,this,[=](){
             this->hide();
             mainScene.show();
+            mainScene.timerNormal=mainScene.startTimer(25);//开始计时
         });
     });
     //在主界面按下返回按钮后，询问是否确定返回，若是，返回初始界面
     connect(&mainScene,&MainScene::back,[=](){
-        int ret=QMessageBox::question(this,"Back",
-                                      "Do you really want to turn back to the initial scene?\n",
-                                      //"Your game progress cannot be saved",
-                                      QMessageBox::No,
-                                      QMessageBox::Yes);
-        switch (ret) {
-        case QMessageBox::Yes:
-            this->show();
-            mainScene.hide();
-            break;
-        default:
-            break;
-        }
+//        int ret=QMessageBox::question(this,"Back",
+//                                      "Do you really want to turn back to the initial scene?\n",
+//                                      //"Your game progress cannot be saved",
+//                                      QMessageBox::No,
+//                                      QMessageBox::Yes);
+//        switch (ret) {
+//        case QMessageBox::Yes:
+//            this->show();
+//            mainScene.hide();
+//            break;
+//        default:
+//            break;
+//        }
+        this->show();
+        mainScene.hide();
     });
     //设置退出按钮
     MyButton *exitBtn=new MyButton(":/Image/exitBtn.png");

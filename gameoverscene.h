@@ -1,0 +1,25 @@
+////////////游戏结束页////////////
+#ifndef GAMEOVERSCENE_H
+#define GAMEOVERSCENE_H
+
+#include <QWidget>
+#include<QEvent>
+#include<QPainter>
+#include<QDialog>
+#include<QMessageBox>
+#include<QString>
+#include"mybutton.h"
+class GameOverScene : public QDialog
+{
+    Q_OBJECT
+public:
+    QString Info;//用于记录gameOver的信息
+    GameOverScene();
+    void paintEvent(QPaintEvent *event);
+signals:
+    void back();//发出返回的信号
+    void restart();//发出重启的信号
+public slots:
+};
+
+#endif // GAMEOVERSCENE_H

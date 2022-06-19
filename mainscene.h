@@ -20,6 +20,7 @@
 #include"pipe.h"
 #include"monster.h"
 #include"mushroom.h"
+#include"gameoverscene.h"
 namespace Ui {
 class MainScene;
 }
@@ -30,6 +31,7 @@ class MainScene : public QWidget
 
 public:
     PauseScene pauseScene;//暂停菜单
+    GameOverScene gameoverScene;//游戏结束菜单
     Brick* brick;
     Castle* castle;
     Mario* mario;
@@ -41,6 +43,7 @@ public:
     double time;//计算通关时间
     bool gameProgress;//判断游戏是否正在进行
     bool timerFastKilled;//判断加速计时器是否开启
+    bool isWin;//用于判断游戏是否胜利
     QString key;//用于记录键盘事件，当移动时为“left/right”，不移动时为“NULL”，以与mario->direction区分，后者记录的是mario的朝向
     explicit MainScene(QWidget *parent = 0);
     ~MainScene();
@@ -56,6 +59,8 @@ public:
     void SetWholeGame();//设置游戏的主要参数(初始化)
     void CollisionCheck();//碰撞检测
     void Fall();//各种物体从高处落到低处(如果放到mario等类内部，则需要将地图传入，会导致耦合，所以就放外面了)
+    void GameOver();//用于处理跟游戏结束有关的事件
+    void SetGameOverScene();//设置游戏结束的弹窗
 private:
     Ui::MainScene *ui;
 signals:

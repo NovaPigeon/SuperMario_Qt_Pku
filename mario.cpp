@@ -9,17 +9,41 @@ Mario::Mario()
     goundState=0;//地面的状态
     walkState=0;//mario运动的状态
     jumpHeight=20;//mario跳跃的最大高度
-    life=5;//mario的生命值
-    isDie=false;//mario是否死亡
+    life=1;//mario的生命值
+    isDie=true;//mario是否死亡
     direction="right";//mario运动的方向，左还是右
     isJump=false;//判断空格是否被按下
     isJumpEnd=true;//判断跳跃是否结束，以防止二段跳
     isSpaceRelease=true;//判断空格是否被松开，以检测滞空时间
-    canMove=true;
+    canMove=true;//能否移动，用于mario的碰撞检测
+    dieState=0;//播放死亡动画时的状态
+    isGameOver=false;
 }
-void Mario::MarioJump()
+void Mario::MarioJump()//弹跳
 {
-    /*弹跳*/
+    if (isJump && isJumpEnd && isSpaceRelease) {
+        isSpaceRelease = false;
+        isJumpEnd = false;
+        jumpHeight = 19;
+        /*
+         * 跳跃机制详解：当按下空格键后，isJump变为true，此时isJumpEnd仍为true，isSpaceRelease仍为true；
+         * 是以此时触发跳跃机制，令isSpaceRelease = false;isJumpEnd = false;
+         * 何解？isSpaceRelease变为false防止跳跃机制在按下一次空格键后再次触发，直至空格键被释放后复原；
+         * isJumpEnd变为false其一是为了在isSpaceRelease复原后仍控制跳跃机制不触发，其二是为了让mario在空中时保持体态不变
+         * jumpHeight变为20直接触发跳跃机制，使y坐标变化，直到碰撞检测使将一切复原，停止跳跃；
+         */
+    }
+    if (jumpHeight<20) {
+        y -= jumpHeight;
+        jumpHeight-=1;
+    }
+    if(y>405)
+    {
+        isJumpEnd=true;
+        jumpHeight=20;
+        y=405;
+    }
+
 }
 void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的话，会导致mario在没有移动时移动
 {
@@ -66,5 +90,17 @@ void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的�
 
 void Mario::MarioDie()//播放mario的死亡动画
 {
-
+    if(isDie)
+    {
+        if(dieState==0)//当且仅当死亡的刹那扣去生命值，否则
+            life--;
+        if(!isDie&&dieState==0&&life==0)
+            isGameOver=true;
+        dieState+=50;
+        if(dieState>1000)
+        {
+            dieState=0;
+            isDie=false;
+        }
+     }
 }

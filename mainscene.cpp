@@ -8,10 +8,11 @@ MainScene::MainScene(QWidget *parent) :
     ui->setupUi(this);
     this->setFixedSize(1000,500);
     this->setWindowTitle("SuperMario");
+    SetGameOverScene();
     SetWholeGame();
     SetPauseScene();
     SetButtons();
-    timerNormal=startTimer(25);
+    //timerNormal=startTimer(25);
     //timerFast=startTimer(15);当且仅当加速时开启
 }
 void MainScene::SetPauseScene()
@@ -64,6 +65,9 @@ void MainScene::SetButtons()
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
         QTimer::singleShot(500,this,[=](){
             emit back();
+            if(!timerFastKilled)
+                killTimer(timerFast);
+            killTimer(timerNormal);
         });
     });
     //实现暂停按钮
@@ -112,6 +116,7 @@ void MainScene::SetWholeGame()
     gameProgress=true;//判断游戏是否正在进行
     timerFastKilled=false;//判断加速计时器是否开启
     time=0;
+    isWin=false;
     key="NULL";
 }
 //重写paintEvent事件
@@ -137,8 +142,10 @@ void MainScene::paintEvent(QPaintEvent *ev)
     painter.drawPixmap(0,0,this->width(),this->height(),pixBackground);
     //绘制时间
     painter.drawText(10,30,"time:"+QString::number(time,'f',1));
+    //绘制生命值
+    painter.drawText(10,60,"life:"+QString::number(mario->life,'d',1));
     //绘制地面
-    painter.drawPixmap(0,450,pixGround,mario->goundState,0,1000,50);//截取自goundX始长1000pix的图片，以营造出动画效果
+    painter.drawPixmap(-30,450,pixGround,mario->goundState,0,1030,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
     for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
     {
@@ -162,7 +169,7 @@ void MainScene::paintEvent(QPaintEvent *ev)
     }
     else
     {
-
+        painter.drawPixmap(mario->windowX,mario->y,pixMarioDie,mario->dieState,0,45,45);
     }
 
 }
@@ -178,6 +185,7 @@ void MainScene::timerEvent(QTimerEvent *event)
     }
     if(timerid==timerNormal)
     {
+        GameOver();
         mario->MarioMove(key);
         mario->MarioJump();
         CollisionCheck();
@@ -211,7 +219,7 @@ void MainScene::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Space:
             mario->isJump=true;
-            mario->isSpaceRelease=false;
+            //mario->isSpaceRelease=false;
             break;
         case Qt::Key_K:
             timerFast=startTimer(15);//开始加速
@@ -257,7 +265,35 @@ void MainScene::Fall()
 {
 
 }
+//处理游戏结束的弹窗
+void MainScene::GameOver()
+{
+    if(mario->isGameOver)
+    {
+        gameoverScene.setParent(this);
+        if(!timerFastKilled)
+            killTimer(timerFast);
+        killTimer(timerNormal);
+        if(isWin)
+           gameoverScene.Info="You Win!Only spend "+QString::number(time)+" seconds.";
+        else
+           gameoverScene.Info="Game over!Sorry";
+        QTimer::singleShot(500,this,[=](){
+            gameoverScene.show();
+        });
 
+    }
+}
+void MainScene::SetGameOverScene()
+{
+    connect(&gameoverScene,&GameOverScene::restart,[=](){
+        gameoverScene.close();
+        timerNormal=startTimer(25);
+        //重新开启计时器
+        SetButtons();
+        SetWholeGame();
+    });
+}
 MainScene::~MainScene()
 {
     killTimer(timerNormal);
