@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -36,7 +36,8 @@ SOURCES += \
     castle.cpp \
     pausescene.cpp \
     monster.cpp \
-    gameoverscene.cpp
+    gameoverscene.cpp \
+    music.cpp
 
 HEADERS += \
         gamebeginwindow.h \
@@ -50,7 +51,8 @@ HEADERS += \
     castle.h \
     pausescene.h \
     monster.h \
-    gameoverscene.h
+    gameoverscene.h \
+    music.h
 
 FORMS += \
         gamebeginwindow.ui \

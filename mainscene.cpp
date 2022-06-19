@@ -1,6 +1,8 @@
 ////////////游戏主界面////////////
 #include "mainscene.h"
 #include "ui_mainscene.h"
+#include<QSound>//多媒体模块下的音效头文件
+
 MainScene::MainScene(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainScene)

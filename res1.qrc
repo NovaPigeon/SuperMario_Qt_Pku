@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Music/bloodrewarding.mp3</file>
+        <file>Music/breakbrick.mp3</file>
+        <file>Music/eatmushroom.mp3</file>
+        <file>Music/finish.mp3</file>
+        <file>Music/gamebegin.mp3</file>
+        <file>Music/getcoin.mp3</file>
+        <file>Music/heatenemy.mp3</file>
+        <file>Music/speeduplevel.mp3</file>
+        <file>Music/timeending.mp3</file>
+        <file>Music/underwaterlevel.mp3</file>
+    </qresource>
+</RCC>
