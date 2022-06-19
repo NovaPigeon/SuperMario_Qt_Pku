@@ -13,6 +13,7 @@
 #include<QTimer>
 #include<QKeyEvent>
 #include<QDialog>
+#include<QSound>//多媒体模块下的音效头文件
 #include"pausescene.h"
 #include"brick.h"
 #include"castle.h"
@@ -21,7 +22,6 @@
 #include"monster.h"
 #include"mushroom.h"
 #include"gameoverscene.h"
-
 namespace Ui {
 class MainScene;
 }

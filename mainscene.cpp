@@ -1,8 +1,6 @@
 ////////////游戏主界面////////////
 #include "mainscene.h"
 #include "ui_mainscene.h"
-#include<QSound>//多媒体模块下的音效头文件
-
 MainScene::MainScene(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainScene)
@@ -152,7 +150,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制得分
     painter.drawText(10,90,"score:"+QString::number(score,'d',1));
     //绘制地面
-    painter.drawPixmap(0,450,pixGround,mario->goundState,0,1000,50);//截取自goundX始长1000pix的图片，以营造出动画效果
+    painter.drawPixmap(-5,450,pixGround,mario->goundState,0,1005,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
     for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
     {
@@ -164,6 +162,17 @@ void MainScene::paintEvent(QPaintEvent *event)
                 painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1),pixUnknownBrick,brick->unknownState,0,50,40);
             if(*(it->begin()+2)!=0 && *(it->begin()+3)==0)//如果该砖块是未知砖块且已被破坏
                 painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1), pixUnknownBrickAfter);
+        }
+    }
+    //绘制水管
+    for (QVector < QVector < int >> ::iterator it = pipe->mp.begin(); it != pipe->mp.end();it++)
+    {
+        if (*(it->begin()) - mario->x > -100 && *(it->begin()) - mario->x < 1000)
+        {
+            if(*(it->begin()+1)==0)
+                painter.drawPixmap(*(it->begin())-mario->x,500-pixGround.height()-pipe->heightshort,pixShortPipe);
+            else
+                painter.drawPixmap(*(it->begin())-mario->x,500-pixGround.height()-pipe->heightLong,pixLongPipe);
         }
     }
     //绘制mario
@@ -327,14 +336,48 @@ void MainScene::CollisionCheckJumpDown()
             brickState=*(it->begin()+3);
             brickWindowX=brickX-mario->x;
             dY=-mario->y+brickY;//800 390 450
-            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+35&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
+            if(mario->windowX+40>=brickWindowX && mario->windowX<=brickWindowX+35 && dY>=-11 && dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
             {
+                //40是mario的宽度
                 if(brickState==1||(brickState==0&&brickType!=0))
                 {
                     mario->isJumpEnd=true;
                     mario->jumpHeight=0;
                     mario->y=brickY;
                     return;
+                }
+            }
+        }
+        //水管
+        int pipeWindowX,tableHeight;
+        for (QVector < QVector < int >> ::iterator it = pipe->mp.begin(); it != pipe->mp.end();it++)
+        {
+            if (*(it->begin()) - mario->x > -100 && *(it->begin()) - mario->x < 1000)
+            {
+                pipeWindowX=*(it->begin())-mario->x;
+                if(*(it->begin()+1)==0)
+                {
+                    tableHeight=500-50-pipe->heightshort;//50为地面高度
+                    if(mario->windowX+40>=pipeWindowX+5 && mario->windowX<=pipeWindowX+pipe->widthShort-15
+                            && mario->y+45>=tableHeight-11 && mario->y+45<=tableHeight+11)//45为mario身高
+                    {
+                        mario->isJumpEnd=true;
+                        mario->jumpHeight=0;
+                        mario->y=tableHeight-45;
+                        return;
+                    }
+                }
+                else
+                {
+                    tableHeight=500-50-pipe->heightLong;//50为地面高度
+                    if(mario->windowX+40>=pipeWindowX+5 && mario->windowX<=pipeWindowX+pipe->widthLong-15
+                            && mario->y+45>=tableHeight-11 && mario->y+45<=tableHeight+11)//45为mario身高
+                    {
+                        mario->isJumpEnd=true;
+                        mario->jumpHeight=0;
+                        mario->y=tableHeight-45;
+                        return;
+                    }
                 }
             }
         }
@@ -378,6 +421,39 @@ void MainScene::CollisionCheckMove()
             }
         }
 
+    }
+    //水管
+    int pipeWindowX,tableHeight;
+    for (QVector < QVector < int >> ::iterator it = pipe->mp.begin(); it != pipe->mp.end();it++)
+    {
+        if (*(it->begin()) - mario->x > -100 && *(it->begin()) - mario->x < 1000)
+        {
+            pipeWindowX=*(it->begin())-mario->x;
+            if(*(it->begin()+1)==0)
+                tableHeight=500-50-pipe->heightshort;//50为地面高度
+            else
+                tableHeight=500-50-pipe->heightLong;
+            if(mario->y<=405 && mario->y+45>=tableHeight-2)
+            {
+                if(mario->direction=="right")
+                {
+                    if(mario->windowX+40<=pipeWindowX+5-2&& mario->windowX+40>=pipeWindowX+5-2-5)
+                    {
+                        mario->canMove=false;
+                        return;
+                    }
+                }
+                if(mario->direction=="left")
+                {
+                    if(mario->windowX>=pipeWindowX+pipe->widthShort-15+2 && mario->windowX<=pipeWindowX+pipe->widthShort-15+2+5)
+                    {
+                        mario->canMove=false;
+                        return;
+                    }
+                }
+            }
+
+        }
     }
     mario->canMove=true;//复原，防止卡住
 }
