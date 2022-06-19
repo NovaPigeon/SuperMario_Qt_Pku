@@ -44,11 +44,12 @@ public:
     bool gameProgress;//判断游戏是否正在进行
     bool timerFastKilled;//判断加速计时器是否开启
     bool isWin;//用于判断游戏是否胜利
+    int score;//用于记录游戏得分
     QString key;//用于记录键盘事件，当移动时为“left/right”，不移动时为“NULL”，以与mario->direction区分，后者记录的是mario的朝向
     explicit MainScene(QWidget *parent = 0);
     ~MainScene();
     //重写绘图事件
-    void paintEvent(QPaintEvent* ev);
+    void paintEvent(QPaintEvent *event);
     //重写计时事件(动画效果主要通过计时事件和绘图事件的结合来实现)
     void timerEvent(QTimerEvent *event);
     //重写键盘事件
@@ -57,8 +58,9 @@ public:
     void SetButtons();//设置游戏主界面的pause,music,back按钮
     void SetPauseScene();//设置游戏的暂停画面
     void SetWholeGame();//设置游戏的主要参数(初始化)
-    void CollisionCheck();//碰撞检测
-    void Fall();//各种物体从高处落到低处(如果放到mario等类内部，则需要将地图传入，会导致耦合，所以就放外面了)
+    void CollisionCheckJumpUp();//碰撞检测
+    void CollisionCheckJumpDown();
+    void CollisionCheckMove();
     void GameOver();//用于处理跟游戏结束有关的事件
     void SetGameOverScene();//设置游戏结束的弹窗
 private:

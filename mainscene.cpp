@@ -119,10 +119,12 @@ void MainScene::SetWholeGame()
     time=0;
     isWin=false;
     key="NULL";
+    score=0;
 }
 //重写paintEvent事件
-void MainScene::paintEvent(QPaintEvent *ev)
+void MainScene::paintEvent(QPaintEvent *event)
 {
+    //qDebug()<<event;
     //创建画家，指定绘图设备,载入图像
     QPainter painter(this);
     QPixmap pixBackground(":/Image/background.png");//背景
@@ -145,6 +147,8 @@ void MainScene::paintEvent(QPaintEvent *ev)
     painter.drawText(10,30,"time:"+QString::number(time,'f',1));
     //绘制生命值
     painter.drawText(10,60,"life:"+QString::number(mario->life,'d',1));
+    //绘制得分
+    painter.drawText(10,90,"score:"+QString::number(score,'d',1));
     //绘制地面
     painter.drawPixmap(-30,450,pixGround,mario->goundState,0,1030,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
@@ -153,20 +157,20 @@ void MainScene::paintEvent(QPaintEvent *ev)
         if (*(it->begin()) - mario->x > -50 && *(it->begin()) - mario->x < 1000)
         {
             if(*(it->begin()+2)==0 && *(it->begin()+3)==1)//如果该砖块是普通砖块且尚未被摧毁
-                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50, pixNormalBrick);
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1), pixNormalBrick);
             if(*(it->begin()+2)!=0 && *(it->begin()+3)==1)//如果该砖块是未知砖块且尚未被破坏
-                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50,pixUnknownBrick,brick->unknownState,0,50,40);
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1),pixUnknownBrick,brick->unknownState,0,50,40);
             if(*(it->begin()+2)!=0 && *(it->begin()+3)==0)//如果该砖块是未知砖块且已被破坏
-                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1)-50, pixUnknownBrickAfter);
+                painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1), pixUnknownBrickAfter);
         }
     }
     //绘制mario
     if(!mario->isDie)
     {
         if(mario->direction=="left")
-            painter.drawPixmap(mario->windowX,mario->y,pixMarioLeft,mario->walkState,0,45,45);
+            painter.drawPixmap(mario->windowX,mario->y,pixMarioLeft,mario->walkState,0,45,45);//朝向为左
         else if(mario->direction=="right")
-            painter.drawPixmap(mario->windowX,mario->y,pixMarioRight,mario->walkState,0,45,45);
+            painter.drawPixmap(mario->windowX,mario->y,pixMarioRight,mario->walkState,0,45,45);//朝向为右
     }
     else
     {
@@ -181,6 +185,7 @@ void MainScene::timerEvent(QTimerEvent *event)
     if(timerid==timerNormal&&mario->isDie)//如果mario死亡，则实现其死亡画面
     {
         mario->MarioDie();
+        time+=0.025;
         update();
         return;
     }
@@ -189,11 +194,12 @@ void MainScene::timerEvent(QTimerEvent *event)
         GameOver();
         mario->MarioMove(key);
         mario->MarioJump();
-        CollisionCheck();
+        CollisionCheckJumpDown();
+        CollisionCheckJumpUp();
+        CollisionCheckMove();
         mushroom->MushroomMove();
         monster->MonsterMove();
         brick->BrickStateChange();
-        Fall();
         time+=0.025;
         update();
     }
@@ -201,7 +207,9 @@ void MainScene::timerEvent(QTimerEvent *event)
     {
         mario->MarioMove(key);
         mario->MarioJump();
-        CollisionCheck();
+        CollisionCheckJumpDown();
+        CollisionCheckJumpUp();
+        CollisionCheckMove();
     }
 
 
@@ -257,15 +265,121 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
         }
     }
 }
-void MainScene::CollisionCheck()
+//上升时碰撞检测
+void MainScene::CollisionCheckJumpUp()
 {
+    //垂直方向
+    if(mario->jumpHeight>0)//如果此时mario仍在上升，需要判定其是否会顶到砖块
+    {
+        //砖块
+        int brickY,brickX,brickType,brickState,brickWindowX,dY;
+        for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
+        {
+            brickX=*(it->begin()+0);
+            brickY=*(it->begin()+1)+40;//+40,为砖块底部的Y坐标
+            brickType=*(it->begin()+2);
+            brickState=*(it->begin()+3);
+            brickWindowX=brickX-mario->x;
+            dY=-mario->y+brickY;//800 390 450
+            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+40&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
+            {
+                if(brickState==1)
+                {
+                    score+=5;
+                    mario->jumpHeight=0;//开始下落
+                    mario->y=brickY;
+                    *(it->begin()+3)=0;
+                    return;
+                }
+                if(brickState==0&&brickType!=0)
+                {
+                    mario->jumpHeight=0;//开始下落
+                    mario->y=brickY;
+                    return;
+                }
+            }
+        }
+    }
 
 }
-//各种物体从高处落到低处(如果放到mario等类内部，则需要将地图传入，会导致耦合，所以就放外面了)
-void MainScene::Fall()
+//下落时碰撞检测
+void MainScene::CollisionCheckJumpDown()
 {
+    if(mario->jumpHeight<0)//mario下落，寻找落脚点
+    {
+        //地面
+        if(mario->y>405)
+        {
+            mario->isJumpEnd=true;
+            mario->jumpHeight=20;
+            mario->y=405;
+            return;
+        }
+        //砖块
+        int brickY,brickX,brickType,brickState,brickWindowX,dY;
+        for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
+        {
+            brickX=*(it->begin()+0);
+            brickY=*(it->begin()+1)-45;//-45，即减去mario的身高
+            brickType=*(it->begin()+2);
+            brickState=*(it->begin()+3);
+            brickWindowX=brickX-mario->x;
+            dY=-mario->y+brickY;//800 390 450
+            if(mario->windowX+40>=brickWindowX&&mario->windowX<=brickWindowX+40&&dY>=-11&&dY<=11)//dY有+-11的余地是因为mario跳跃时Y最多一次变化20
+            {
+                if(brickState==1||(brickState==0&&brickType!=0))
+                {
+                    mario->isJumpEnd=true;
+                    mario->jumpHeight=0;
+                    mario->y=brickY;
+                    return;
+                }
+            }
+        }
+    }
 
 }
+//水平移动碰撞检测
+void MainScene::CollisionCheckMove()
+{
+    //砖块
+    int brickYup,brickYdown,brickX,brickType,brickState,brickWindowX;
+    for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
+    {
+        brickX=*(it->begin()+0);
+        brickYup=*(it->begin()+1)-45;//-45，即减去mario的身高
+        brickYdown=*(it->begin()+1)+40;
+        brickType=*(it->begin()+2);
+        brickState=*(it->begin()+3);
+        brickWindowX=brickX-mario->x;
+        //mario朝右时
+        if(brickState==1||(brickState==0&&brickType!=0))
+        {
+            if(mario->y>brickYup&&mario->y<brickYdown)
+            {
+                if(mario->direction=="right")
+                {
+                    if(mario->windowX+40<brickWindowX&&mario->windowX)
+                    {
+                        mario->canMove=false;
+                        return;
+                    }
+                }
+                if(mario->direction=="left")
+                {
+                    //if(dX>=30&&dX<=30+40)
+                    {
+                        mario->canMove=false;
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+    mario->canMove=true;//复原，防止卡住
+}
+
 //处理游戏结束的弹窗
 void MainScene::GameOver()
 {
@@ -275,9 +389,10 @@ void MainScene::GameOver()
             killTimer(timerFast);
         killTimer(timerNormal);
         if(isWin)
-           gameoverScene.Info="You Win!Only spend "+QString::number(time)+" seconds.";
+            gameoverScene.Info="You Win!Only spend "+QString::number(time)+" seconds.";
         else
-           gameoverScene.Info="Game over!Sorry";
+            gameoverScene.Info="Game over!Sorry";
+        //为什么显示不出文字捏？？
         QTimer::singleShot(500,this,[=](){
             gameoverScene.setParent(this);
             gameoverScene.open();
@@ -337,4 +452,11 @@ MainScene::~MainScene()
     if(!timerFastKilled)
         killTimer(timerFast);
     delete ui;
+    delete brick;
+    delete castle;
+    delete mario;
+    delete pipe;
+    delete monster;
+    delete mushroom;
 }
+

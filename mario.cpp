@@ -8,7 +8,7 @@ Mario::Mario()
     windowX=0;//mario与地面的相对坐标，实现地面的相对运动
     goundState=0;//地面的状态
     walkState=0;//mario运动的状态
-    jumpHeight=20;//mario跳跃的最大高度
+    jumpHeight=20;//mario跳跃距离
     life=3;//mario的生命值
     isDie=false;//mario是否死亡
     direction="right";//mario运动的方向，左还是右
@@ -29,7 +29,7 @@ void Mario::MarioJump()//弹跳
          * 跳跃机制详解：当按下空格键后，isJump变为true，此时isJumpEnd仍为true，isSpaceRelease仍为true；
          * 是以此时触发跳跃机制，令isSpaceRelease = false;isJumpEnd = false;
          * 何解？isSpaceRelease变为false防止跳跃机制在按下一次空格键后再次触发，直至空格键被释放后复原；
-         * isJumpEnd变为false其一是为了在isSpaceRelease复原后仍控制跳跃机制不触发，其二是为了让mario在空中时保持体态不变
+         * isJumpEnd变为false,其一是为了在isSpaceRelease复原后仍控制跳跃机制不触发，其二是为了让mario在空中时保持体态不变
          * jumpHeight变为20直接触发跳跃机制，使y坐标变化，直到碰撞检测使将一切复原，停止跳跃；
          */
     }
@@ -37,16 +37,17 @@ void Mario::MarioJump()//弹跳
         y -= jumpHeight;
         jumpHeight-=1;
     }
-    if(y>405)
-    {
-        isJumpEnd=true;
-        jumpHeight=20;
-        y=405;
-    }
+//    if(y>405)
+//    {
+//        isJumpEnd=true;
+//        jumpHeight=20;
+//        y=405;
+//    }
 
 }
 void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的话，会导致mario在没有移动时移动
 {
+    //qDebug()<<x;
     //刚开始时，mario有相对窗口的运动，当mario居中时，mario就相对窗口静止，相对地面运动
     if(key=="left"&&x<=400&&canMove&&x>=30)//如果x<30,mario可能会消失在边界
     {

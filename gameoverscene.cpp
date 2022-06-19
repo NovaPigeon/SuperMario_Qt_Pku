@@ -19,7 +19,7 @@ void GameOverScene::paintEvent(QPaintEvent *event)
     //设置字体
     painter.setFont(QFont("Times",10,QFont::Black));
     //绘制文字
-    painter.drawText(0,0,Info);
+    painter.drawText(0,0,"You Die");
     //画图
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
 }
