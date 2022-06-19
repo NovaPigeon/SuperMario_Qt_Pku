@@ -16,5 +16,10 @@ void GameOverScene::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     //创建背景图并绘制之
     QPixmap pix(":/Image/pauseScene.png");
+    //设置字体
+    painter.setFont(QFont("Times",10,QFont::Black));
+    //绘制文字
+    painter.drawText(0,0,Info);
+    //画图
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
 }

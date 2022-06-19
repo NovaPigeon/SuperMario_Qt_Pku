@@ -54,11 +54,11 @@ Brick::Brick()
         mp.push_back(v);
         v.clear();
     }
-    for (QVector < QVector < int >> ::iterator it = mp.begin(); it != mp.end();it++)
-    {
-        qDebug()<<" "<<*(it->begin()+0)<<" "<<*(it->begin()+1)<<" "<<*(it->begin()+2)<<" "<<*(it->begin()+3);
-        qDebug()<<"\n";
-    }
+//    for (QVector < QVector < int >> ::iterator it = mp.begin(); it != mp.end();it++)
+//    {
+//        qDebug()<<" "<<*(it->begin()+0)<<" "<<*(it->begin()+1)<<" "<<*(it->begin()+2)<<" "<<*(it->begin()+3);
+//        qDebug()<<"\n";
+//    }
 }
 void Brick::BrickStateChange()
 {

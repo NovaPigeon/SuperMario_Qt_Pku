@@ -9,8 +9,8 @@ Mario::Mario()
     goundState=0;//地面的状态
     walkState=0;//mario运动的状态
     jumpHeight=20;//mario跳跃的最大高度
-    life=1;//mario的生命值
-    isDie=true;//mario是否死亡
+    life=3;//mario的生命值
+    isDie=false;//mario是否死亡
     direction="right";//mario运动的方向，左还是右
     isJump=false;//判断空格是否被按下
     isJumpEnd=true;//判断跳跃是否结束，以防止二段跳
@@ -92,15 +92,13 @@ void Mario::MarioDie()//播放mario的死亡动画
 {
     if(isDie)
     {
-        if(dieState==0)//当且仅当死亡的刹那扣去生命值，否则
-            life--;
-        if(!isDie&&dieState==0&&life==0)
-            isGameOver=true;
         dieState+=50;
-        if(dieState>1000)
+        if(dieState>=1000)
         {
             dieState=0;
             isDie=false;
+            life--;
+            isGameOver=true;
         }
      }
 }

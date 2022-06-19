@@ -2,7 +2,7 @@
 #ifndef MARIO_H
 #define MARIO_H
 #include<QString>
-
+#include<QDebug>
 class Mario
 {
 public:

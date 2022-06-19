@@ -8,6 +8,7 @@ MainScene::MainScene(QWidget *parent) :
     ui->setupUi(this);
     this->setFixedSize(1000,500);
     this->setWindowTitle("SuperMario");
+
     SetGameOverScene();
     SetWholeGame();
     SetPauseScene();
@@ -270,7 +271,6 @@ void MainScene::GameOver()
 {
     if(mario->isGameOver)
     {
-        gameoverScene.setParent(this);
         if(!timerFastKilled)
             killTimer(timerFast);
         killTimer(timerNormal);
@@ -279,18 +279,55 @@ void MainScene::GameOver()
         else
            gameoverScene.Info="Game over!Sorry";
         QTimer::singleShot(500,this,[=](){
-            gameoverScene.show();
+            gameoverScene.setParent(this);
+            gameoverScene.open();
+            qDebug()<<gameoverScene.Info;
         });
 
     }
 }
 void MainScene::SetGameOverScene()
 {
+
+    //实现退出按钮
+    MyButton *exitGGBtn=new MyButton(":/Image/exitBtn.png");
+    exitGGBtn->setParent(&gameoverScene);
+    exitGGBtn->move(0.5*gameoverScene.width()-0.5*exitGGBtn->width(),0.5*gameoverScene.height());
+    connect(exitGGBtn,&MyButton::clicked,
+            [=](){
+        exitGGBtn->ZoomUp();
+        exitGGBtn->ZoomDown();
+        //先暂停0.5s，弹出一个是否选择退出的问题对话框
+        QTimer::singleShot(500,this,[=](){
+            int ret=QMessageBox::question(this,"Quit",
+                                          "Do you really want to quit the game?",
+                                          QMessageBox::No,
+                                          QMessageBox::Yes);
+            switch (ret) {
+            case QMessageBox::Yes:
+                this->close();//如果选Yes，则退出游戏；否则什么都不用做
+                break;
+            default:
+                break;
+            }
+        });
+    });
+    //实现重启按钮
+    MyButton*restartBtn=new MyButton(":/Image/continueBtn.png");
+    restartBtn->setParent(&gameoverScene);
+    restartBtn->move(0.5*gameoverScene.width()-0.5*restartBtn->width(),0.1*gameoverScene.height());
+    connect(restartBtn,&MyButton::clicked,[=](){
+        restartBtn->ZoomUp();
+        restartBtn->ZoomDown();
+        //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
+        QTimer::singleShot(500,this,[=](){
+            emit gameoverScene.restart();
+        });
+    });
     connect(&gameoverScene,&GameOverScene::restart,[=](){
         gameoverScene.close();
         timerNormal=startTimer(25);
         //重新开启计时器
-        SetButtons();
         SetWholeGame();
     });
 }
