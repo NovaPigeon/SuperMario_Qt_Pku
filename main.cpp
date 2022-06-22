@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/Image/openScene.png"));
     splash->show();
     gameBeginWindow w;
-    QTimer::singleShot(1000,splash,SLOT(close()));
-    QTimer::singleShot(2000,&w,SLOT(show()));
+    QTimer::singleShot(500,splash,SLOT(close()));
+    QTimer::singleShot(1000,&w,SLOT(show()));
 
     return a.exec();
 }

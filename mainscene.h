@@ -13,7 +13,8 @@
 #include<QTimer>
 #include<QKeyEvent>
 #include<QDialog>
-#include"music.h"//多媒体模块下的音效头文件
+#include<QLabel>
+#include<QSound>//多媒体模块下的音效头文件
 #include"pausescene.h"
 #include"brick.h"
 #include"castle.h"

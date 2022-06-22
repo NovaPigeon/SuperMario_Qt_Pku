@@ -8,12 +8,14 @@
 #include<QDialog>
 #include<QMessageBox>
 #include<QString>
+#include<QLabel>
 #include"mybutton.h"
 class GameOverScene : public QDialog
 {
     Q_OBJECT
 public:
-    QString Info;//用于记录gameOver的信息
+//    QString Info;//用于记录gameOver的信息
+    QLabel label;//显示文字用
     GameOverScene();
     void paintEvent(QPaintEvent *event);
 signals:

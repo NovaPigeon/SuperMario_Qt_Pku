@@ -7,6 +7,7 @@ class Castle
 {
 public:
     Castle();
+    int x,y;//城堡的坐标
 };
 
 #endif // CASTLE_H

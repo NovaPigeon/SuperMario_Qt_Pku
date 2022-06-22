@@ -139,16 +139,17 @@ void MainScene::paintEvent(QPaintEvent *event)
     QPixmap pixMounster(":/Image/mounster.png");//怪物
     QPixmap pixLongPipe(":/Image/longpipe.png");//长水管
     QPixmap pixShortPipe(":/Image/shortpipe.png");//短水管
+    QPixmap pixCasle(":/Image/castle.png");//城堡/终点
     //设置字体
     painter.setFont(QFont("Times",25,QFont::Black));
     //绘制背景图
     painter.drawPixmap(0,0,this->width(),this->height(),pixBackground);
     //绘制时间
-    painter.drawText(10,30,"time:"+QString::number(time,'f',1));
+    painter.drawText(10,30,"TIME:"+QString::number(time,'f',1));
     //绘制生命值
-    painter.drawText(10,60,"life:"+QString::number(mario->life,'d',1));
+    painter.drawText(10,60,"LIFE:"+QString::number(mario->life,'f',0));
     //绘制得分
-    painter.drawText(10,90,"score:"+QString::number(score,'d',1));
+    painter.drawText(10,90,"SCORE:"+QString::number(score,'f',0));
     //绘制地面
     painter.drawPixmap(-5,450,pixGround,mario->goundState,0,1005,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
@@ -175,6 +176,10 @@ void MainScene::paintEvent(QPaintEvent *event)
                 painter.drawPixmap(*(it->begin())-mario->x,500-pixGround.height()-pipe->heightLong,pixLongPipe);
         }
     }
+
+    //绘制casle/终点
+    if(castle->x-mario->x>-100 && castle->x-mario->x<1000)
+        painter.drawPixmap(castle->x-mario->x,castle->y,pixCasle.width(),pixCasle.height(),pixCasle);
     //绘制mario
     if(!mario->isDie)
     {
@@ -187,7 +192,6 @@ void MainScene::paintEvent(QPaintEvent *event)
     {
         painter.drawPixmap(mario->windowX,mario->y,pixMarioDie,mario->dieState,0,45,45);
     }
-
 }
 //重写计时事件(动画效果主要通过计时事件和绘图事件的结合来实现)
 void MainScene::timerEvent(QTimerEvent *event)
@@ -319,7 +323,7 @@ void MainScene::CollisionCheckJumpDown()
     if(mario->jumpHeight<0)//mario下落，寻找落脚点
     {
         //地面
-        if(mario->y>405)
+        if(mario->y>=405)
         {
             mario->isJumpEnd=true;
             mario->jumpHeight=20;
@@ -433,7 +437,7 @@ void MainScene::CollisionCheckMove()
                 tableHeight=500-50-pipe->heightshort;//50为地面高度
             else
                 tableHeight=500-50-pipe->heightLong;
-            if(mario->y<=405 && mario->y+45>=tableHeight-2)
+            if(mario->y<=450 && mario->y+50>=tableHeight-2)
             {
                 if(mario->direction=="right")
                 {
@@ -445,6 +449,7 @@ void MainScene::CollisionCheckMove()
                 }
                 if(mario->direction=="left")
                 {
+                    //widthshort=widthlong
                     if(mario->windowX>=pipeWindowX+pipe->widthShort-15+2 && mario->windowX<=pipeWindowX+pipe->widthShort-15+2+5)
                     {
                         mario->canMove=false;
@@ -461,20 +466,25 @@ void MainScene::CollisionCheckMove()
 //处理游戏结束的弹窗
 void MainScene::GameOver()
 {
-    if(mario->isGameOver)
+    if(abs((castle->x-mario->x+100)-mario->windowX-20)<=50 && abs(castle->y+195-mario->y-45)<=50)
+        isWin=true;
+    if(mario->isGameOver||isWin)
     {
         if(!timerFastKilled)
             killTimer(timerFast);
         killTimer(timerNormal);
+        QString text;
         if(isWin)
-            gameoverScene.Info="You Win!Only spend "+QString::number(time)+" seconds.";
+            text="\tYou Win!\nSpend "+QString::number(time,'f',1)+" seconds \nEarn "+QString::number(score,'f',0)+" coins!";
         else
-            gameoverScene.Info="Game over!Sorry";
-        //为什么显示不出文字捏？？
+           text="You Lost!\nSorry!";
+        gameoverScene.label.setText(text);//设置文字
+        gameoverScene.label.adjustSize();//设置自动尺寸
+        gameoverScene.label.move((gameoverScene.width()-gameoverScene.label.width())/2,gameoverScene.height()*0.2);//设置label居中位置
         QTimer::singleShot(500,this,[=](){
             gameoverScene.setParent(this);
             gameoverScene.open();
-            qDebug()<<gameoverScene.Info;
+            //qDebug()<<gameoverScene.Info;
         });
 
     }
@@ -485,7 +495,7 @@ void MainScene::SetGameOverScene()
     //实现退出按钮
     MyButton *exitGGBtn=new MyButton(":/Image/exitBtn.png");
     exitGGBtn->setParent(&gameoverScene);
-    exitGGBtn->move(0.5*gameoverScene.width()-0.5*exitGGBtn->width(),0.5*gameoverScene.height());
+    exitGGBtn->move(0.5*gameoverScene.width()-0.5*exitGGBtn->width(),0.7*gameoverScene.height());
     connect(exitGGBtn,&MyButton::clicked,
             [=](){
         exitGGBtn->ZoomUp();
@@ -508,7 +518,7 @@ void MainScene::SetGameOverScene()
     //实现重启按钮
     MyButton*restartBtn=new MyButton(":/Image/continueBtn.png");
     restartBtn->setParent(&gameoverScene);
-    restartBtn->move(0.5*gameoverScene.width()-0.5*restartBtn->width(),0.1*gameoverScene.height());
+    restartBtn->move(0.5*gameoverScene.width()-0.5*restartBtn->width(),0.5*gameoverScene.height());
     connect(restartBtn,&MyButton::clicked,[=](){
         restartBtn->ZoomUp();
         restartBtn->ZoomDown();
