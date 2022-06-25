@@ -7,10 +7,12 @@
 #include<mainscene.h>
 #include<aboutscene.h>
 #include<mybutton.h>
+#include<music.h>
 #include<QPainter>
 #include<QDebug>
 #include<QMessageBox>//标准对话框
 #include<QTimer>
+
 namespace Ui {
 class gameBeginWindow;
 }
@@ -24,6 +26,8 @@ public:
     ~gameBeginWindow();
     //重写PaintEvent事件
     void paintEvent(QPaintEvent* ev);
+    //音效控制
+    Music musicControl;
 
 private:
     Ui::gameBeginWindow *ui;

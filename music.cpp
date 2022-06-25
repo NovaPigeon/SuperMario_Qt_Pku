@@ -1,15 +1,16 @@
 #include "music.h"
+//#include<gamebeginwindow.h>
 
-music::music(QWidget *parent) : QWidget(parent)
+Music::Music(QWidget *parent) : QWidget(parent)
 {
-    bloodRewarding=new QSound(":/Music/bloodrewarding.mp3",this);
-    breakBrick=new QSound(":/Music/breakbrick.mp3",this);
-    eatMushroom=new QSound(":/Music/eatmushroom.mp3",this);
-    finish=new QSound(":/Music/finish.mp3",this);
-    gameBegin=new QSound(":/Music/gamebegin.mp3",this);
-    getCoin=new QSound(":/Music/getcoin.mp3",this);
-    beatEnemy=new QSound(":/Music/heatenemy.mp3",this);//起错名字了
-    speedUpLevel=new QSound(":/Music/speeduplevel.mp3",this);
-    timeEnding=new QSound(":/Music/timeending.mp3",this);
-    underWaterLevel=new QSound(":/Music/underwaterlevel.mp3",this);
+    beatEnemy=new QSound(":/Music/beatenemy.wav",this);
+    bloodRewarding=new QSound(":/Music/bloodrewarding.wav",this);
+    breakBrick=new QSound(":/Music/breakbrick.wav",this);
+    die=new QSound(":/Music/die.wav",this);
+    eatMushroom=new QSound(":/Music/eatmushroom.wav",this);
+    fail=new QSound(":/Music/fail.wav",this);
+    finish=new QSound(":/Music/finish.wav",this);
+    gameBegin=new QSound(":/Music/gamebegin.wav",this);
+    getCoin=new QSound(":/Music/getcoin.wav",this);
+    mainMusic=new QSound(":/Music/mainmusic.wav",this);
 }

@@ -12,6 +12,9 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
     this->setWindowIcon(QPixmap(":/Image/icon.ico"));
     //设置窗口标题
     this->setWindowTitle("SuperMario");
+    //播放开始音乐
+    musicControl.gameBegin->setLoops(10000);//几乎做到无限循环
+    musicControl.gameBegin->play();
     //设置开始按钮
     MyButton *startBtn=new MyButton(":/Image/startBtn.png");
     startBtn->setParent(this);
@@ -23,10 +26,15 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
         startBtn->ZoomDown();
         //实现弹起再落下的特效，暂停0.5s后，进入游戏主界面
         QTimer::singleShot(500,this,[=](){
+            musicControl.gameBegin->stop();
             this->hide();
             mainScene.show();
             mainScene.timerNormal=mainScene.startTimer(25);//开始计时
+            //播放主体音乐
+            musicControl.mainMusic->setLoops(10000);
+            musicControl.mainMusic->play();
         });
+
     });
     //在主界面按下返回按钮后，询问是否确定返回，若是，返回初始界面
     connect(&mainScene,&MainScene::back,[=](){
@@ -43,8 +51,13 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
 //        default:
 //            break;
 //        }
+        //暂停主体音乐
+        musicControl.mainMusic->stop();
         this->show();
         mainScene.hide();
+        //继续播放开始界面音乐
+        musicControl.gameBegin->setLoops(10000);
+        musicControl.gameBegin->play();
     });
     //设置退出按钮
     MyButton *exitBtn=new MyButton(":/Image/exitBtn.png");
@@ -52,6 +65,8 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
     exitBtn->move(this->width()*0.81,this->height()*0.72);
     connect(exitBtn,&MyButton::clicked,
             [=](){
+        //暂停开始界面音乐
+        musicControl.gameBegin->stop();
         //qDebug()<<"2";
         exitBtn->ZoomUp();
         exitBtn->ZoomDown();
@@ -63,14 +78,16 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
                                           QMessageBox::Yes);
             switch (ret) {
             case QMessageBox::Yes:
-                this->close();//如果选Yes，则退出游戏；否则什么都不用做
+                this->close();//如果选Yes，则退出游戏；否则返回开始界面，播放音乐
                 break;
             default:
+                musicControl.gameBegin->setLoops(10000);
+                musicControl.gameBegin->play();
                 break;
             }
         });
     });
-    //设置关于按钮
+    //设置关于按钮,开始界面音乐继续播放
     MyButton *aboutBtn=new MyButton(":/Image/aboutBtn.png");
     aboutBtn->setParent(this);
     aboutBtn->move(this->width()*0.86,this->height()*0.89);
