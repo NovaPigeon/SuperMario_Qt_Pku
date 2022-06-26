@@ -4,23 +4,26 @@
 #include"mybutton.h"
 #include <QWidget>
 #include<QSound>
+#include<QSoundEffect>
+
 
 class Music : public QWidget
 {
     Q_OBJECT
 public:
     explicit Music(QWidget *parent = 0);
-   QSound*beatEnemy;
-   QSound*bloodRewarding;
-   QSound*breakBrick;
-   QSound*die;
-   QSound*eatMushroom;
-   QSound*fail;
-   QSound*finish;
-   QSound*gameBegin;
-   QSound*getCoin;
-   QSound*mainMusic;
-   QSound*ButtonClicked;
+   QSoundEffect*beatEnemy;
+   QSoundEffect*bloodRewarding;
+   QSoundEffect*breakBrick;
+   QSoundEffect*die;
+   QSoundEffect*eatMushroom;
+   QSoundEffect*fail;
+   QSoundEffect*finish;
+   QSoundEffect*gameBegin;
+   QSoundEffect*getCoin;
+   QSoundEffect*mainMusic;
+   QSoundEffect*ButtonClicked;
+   bool isOnMute;//静音状态标记
 signals:
 
 public slots:

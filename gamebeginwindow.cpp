@@ -13,7 +13,6 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
     //设置窗口标题
     this->setWindowTitle("SuperMario");
     //播放开始音乐
-    musicControl.gameBegin->setLoops(1);//循环次数
     musicControl.gameBegin->play();
     //设置开始按钮
     MyButton *startBtn=new MyButton(":/Image/startBtn.png");
@@ -26,12 +25,13 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
         startBtn->ZoomDown();
         //播放提示音
         musicControl.ButtonClicked->play();
+        musicControl.gameBegin->stop();
         //实现弹起再落下的特效，暂停0.5s后，进入游戏主界面
         QTimer::singleShot(500,this,[=](){
-            musicControl.gameBegin->stop();
             this->hide();
             mainScene.show();
-            mainScene.musicControl.mainMusic->setLoops(10000);
+            mainScene.musicControl.mainMusic->setLoopCount(10000);//无限循环
+            mainScene.musicControl.mainMusic->setVolume(mainScene.musicControl.isOnMute?0:1);
             mainScene.musicControl.mainMusic->play();
             mainScene.timerNormal=mainScene.startTimer(25);//开始计时
         });
@@ -66,11 +66,11 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
             [=](){
         //暂停开始界面音乐
         musicControl.gameBegin->stop();
+        //播放提示音
+        musicControl.ButtonClicked->play();
         //qDebug()<<"2";
         exitBtn->ZoomUp();
         exitBtn->ZoomDown();
-        //播放提示音
-        musicControl.ButtonClicked->play();
         //先暂停0.5s，弹出一个是否选择退出的问题对话框
         QTimer::singleShot(500,this,[=](){
             int ret=QMessageBox::question(this,"Quit",
@@ -82,7 +82,7 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
                 this->close();//如果选Yes，则退出游戏；否则返回开始界面，播放音乐
                 break;
             default:
-                musicControl.gameBegin->play();
+//                musicControl.gameBegin->play();
                 break;
             }
         });

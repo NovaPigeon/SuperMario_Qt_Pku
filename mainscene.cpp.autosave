@@ -26,11 +26,11 @@ void MainScene::SetPauseScene()
         musicControl.ButtonClicked->play();
         continueBtn->ZoomUp();
         continueBtn->ZoomDown();
-        musicControl.mainMusic->setVolume(musicControl.isOnMute?0.0f:1.0f);
+        musicControl.mainMusic->setVolume(musicControl.isOnMute?0:1);
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
         QTimer::singleShot(500,this,[=](){
             //继续播放音乐
-            musicControl.mainMusic->setVolume(musicControl.isOnMute?0.0f:1.0f);
+            musicControl.mainMusic->setVolume(musicControl.isOnMute?0:1);
             emit pauseScene.back();
         });
     });

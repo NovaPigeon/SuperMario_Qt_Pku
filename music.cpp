@@ -3,15 +3,27 @@
 
 Music::Music(QWidget *parent) : QWidget(parent)
 {
-    beatEnemy=new QSound(":/Music/beatenemy.wav",this);
-    bloodRewarding=new QSound(":/Music/bloodrewarding.wav",this);
-    breakBrick=new QSound(":/Music/breakbrick.wav",this);
-    die=new QSound(":/Music/die.wav",this);
-    eatMushroom=new QSound(":/Music/eatmushroom.wav",this);
-    fail=new QSound(":/Music/fail.wav",this);
-    finish=new QSound(":/Music/finish.wav",this);
-    gameBegin=new QSound(":/Music/gamebegin.wav",this);
-    getCoin=new QSound(":/Music/getcoin.wav",this);
-    mainMusic=new QSound(":/Music/mainmusic.wav",this);
-    ButtonClicked=new QSound(":/Music/clicked.wav",this);
+    beatEnemy=new QSoundEffect;
+    beatEnemy->setSource(QUrl::fromLocalFile(":/Music/beatenemy.wav"));
+    bloodRewarding=new QSoundEffect;
+    bloodRewarding->setSource(QUrl::fromLocalFile(":/Music/bloodrewarding.wav"));
+    breakBrick=new QSoundEffect;
+    breakBrick->setSource(QUrl::fromLocalFile(":/Music/breakbrick.wav"));
+    die=new QSoundEffect;
+    die->setSource(QUrl::fromLocalFile(":/Music/die.wav"));
+    eatMushroom=new QSoundEffect;
+    eatMushroom->setSource(QUrl::fromLocalFile(":/Music/eatmushroom.wav"));
+    fail=new QSoundEffect;
+    fail->setSource(QUrl::fromLocalFile(":/Music/fail.wav"));
+    finish=new QSoundEffect;
+    finish->setSource(QUrl::fromLocalFile(":/Music/finish.wav"));
+    gameBegin=new QSoundEffect;
+    gameBegin->setSource(QUrl::fromLocalFile(":/Music/gamebegin.wav"));
+    getCoin=new QSoundEffect;
+    getCoin->setSource(QUrl::fromLocalFile(":/Music/getcoin.wav"));
+    mainMusic=new QSoundEffect;
+    mainMusic->setSource(QUrl::fromLocalFile(":/Music/mainmusic.wav"));
+    ButtonClicked=new QSoundEffect;
+    ButtonClicked->setSource(QUrl::fromLocalFile(":/Music/clicked.wav"));
+    isOnMute=false;
 }

@@ -10,7 +10,7 @@
 #include<QEvent>
 #include<QTimer>
 #include<QDebug>
-#include<music.h>
+
 class MyButton : public QPushButton
 {
     Q_OBJECT
