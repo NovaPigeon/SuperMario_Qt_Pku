@@ -95,6 +95,7 @@ void MainScene::SetButtons()
             //关闭计时器，暂停音乐，实现暂停
             musicControl->mainMusic->stop();
             pauseScene.setParent(this);
+            pauseScene.move(0.5*this->width()-0.5*pauseScene.width(),0.5*this->height()-0.5*pauseScene.height());
             pauseScene.open();
         });
     });
@@ -496,6 +497,7 @@ void MainScene::GameOver()
         gameoverScene.label.move((gameoverScene.width()-gameoverScene.label.width())/2,gameoverScene.height()*0.2);//设置label居中位置
         QTimer::singleShot(500,this,[=](){
             gameoverScene.setParent(this);
+            gameoverScene.move(0.5*this->width()-0.5*gameoverScene.width(),0.5*this->height()-0.5*gameoverScene.height());
             gameoverScene.open();
             //qDebug()<<gameoverScene.Info;
         });

@@ -4,7 +4,7 @@
 GameOverScene::GameOverScene()
 {
     //设置固定的窗口大小
-    this->setFixedSize(400,500);
+    this->setFixedSize(300,400);
     //设置窗口标题
     this->setWindowTitle("GameOver");
     //设置窗口样式
