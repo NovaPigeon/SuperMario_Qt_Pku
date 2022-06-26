@@ -20,6 +20,7 @@ public:
    QSound*gameBegin;
    QSound*getCoin;
    QSound*mainMusic;
+   QSound*ButtonClicked;
 signals:
 
 public slots:

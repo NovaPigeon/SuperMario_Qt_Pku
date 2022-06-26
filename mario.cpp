@@ -61,7 +61,7 @@ void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的�
         windowX+=5;
         walkState+=57;
     }
-    else if((key=="left"&&x<30)||(key!="NULL"&&!canMove))//mario处于屏幕最左侧或者被卡着不动时，mario姿势变化，位置不变
+    else if(/*(key=="left"&&x<30)||*/(key!="NULL"&&!canMove))//mario处于屏幕最左侧或者被卡着不动时，mario姿势变化，位置不变
     {
         walkState+=57;
     }

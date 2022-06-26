@@ -13,4 +13,5 @@ Music::Music(QWidget *parent) : QWidget(parent)
     gameBegin=new QSound(":/Music/gamebegin.wav",this);
     getCoin=new QSound(":/Music/getcoin.wav",this);
     mainMusic=new QSound(":/Music/mainmusic.wav",this);
+    ButtonClicked=new QSound(":/Music/clicked.wav",this);
 }

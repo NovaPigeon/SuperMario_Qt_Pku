@@ -7,6 +7,7 @@
 #include<mainscene.h>
 #include<aboutscene.h>
 #include<mybutton.h>
+#include<mainscene.h>
 #include<music.h>
 #include<QPainter>
 #include<QDebug>

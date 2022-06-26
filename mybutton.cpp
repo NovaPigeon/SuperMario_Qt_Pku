@@ -42,6 +42,8 @@ void MyButton::ZoomDown()//落下
 {
     QPropertyAnimation * animationDown =  new QPropertyAnimation(this,"geometry");
     animationDown->setDuration(200);
+    //播放提示音
+    //musicControl.ButtonClicked->play();
     animationDown->setStartValue(QRect(this->x(),this->y()+5,this->width(),this->height()));
     animationDown->setEndValue(QRect(this->x(),this->y(),this->width(),this->height()));
     animationDown->setEasingCurve(QEasingCurve::OutBounce);

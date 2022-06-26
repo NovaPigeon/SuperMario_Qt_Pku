@@ -40,7 +40,7 @@ public:
     Pipe* pipe;
     Monster* monster;
     Mushroom* mushroom;//游戏画面各组成要素
-    Music*musicControl;//游戏音乐音效
+    Music musicControl;//游戏音乐音效
 
     int timerNormal;
     int timerFast;//两个计时器的编号，Fast用于加速，Normal用于常规绘图

@@ -1,6 +1,7 @@
 ////////////游戏主界面////////////
 #include "mainscene.h"
 #include "ui_mainscene.h"
+#include<QDebug>
 MainScene::MainScene(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainScene)
@@ -8,8 +9,6 @@ MainScene::MainScene(QWidget *parent) :
     ui->setupUi(this);
     this->setFixedSize(1000,500);
     this->setWindowTitle("SuperMario");
-//    musicControl->mainMusic->setLoops(10000);
-//    musicControl->mainMusic->play();
     SetGameOverScene();
     SetWholeGame();
     SetPauseScene();
@@ -24,13 +23,15 @@ void MainScene::SetPauseScene()
     continueBtn->setParent(&pauseScene);
     continueBtn->move(0.5*pauseScene.width()-0.5*continueBtn->width(),0.1*pauseScene.height());
     connect(continueBtn,&MyButton::clicked,[=](){
+        musicControl.ButtonClicked->play();
         continueBtn->ZoomUp();
         continueBtn->ZoomDown();
-//        musicControl->mainMusic->stop();
+        musicControl.mainMusic->setLoops(10000);
+        musicControl.mainMusic->play();
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
         QTimer::singleShot(500,this,[=](){
             emit pauseScene.back();
-            musicControl->mainMusic->stop();
+//            musicControl.mainMusic->stop();
         });
     });
     //实现退出按钮
@@ -39,11 +40,12 @@ void MainScene::SetPauseScene()
     exitBtn->move(0.5*pauseScene.width()-0.5*exitBtn->width(),0.5*pauseScene.height());
     connect(exitBtn,&MyButton::clicked,
             [=](){
+        musicControl.ButtonClicked->play();
+        musicControl.mainMusic->stop();
         exitBtn->ZoomUp();
         exitBtn->ZoomDown();
         //先暂停0.5s，弹出一个是否选择退出的问题对话框
         QTimer::singleShot(500,this,[=](){
-            musicControl->mainMusic->stop();
             int ret=QMessageBox::question(this,"Quit",
                                           "Do you really want to quit the game?",
                                           QMessageBox::No,
@@ -53,8 +55,8 @@ void MainScene::SetPauseScene()
                 this->close();//如果选Yes，则退出游戏；否则回到游戏
                 break;
             default:
-                musicControl->mainMusic->setLoops(10000);
-                musicControl->mainMusic->play();
+//                musicControl.mainMusic->setLoops(10000);
+//                musicControl.mainMusic->play();
                 break;
             }
         });
@@ -67,14 +69,15 @@ void MainScene::SetButtons()
     backBtn->setParent(this);
     backBtn->move(0.945*this->width(),0.89*this->height());
     connect(backBtn,&MyButton::clicked,[=](){
+        musicControl.ButtonClicked->play();
         backBtn->ZoomUp();
         backBtn->ZoomDown();
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
         QTimer::singleShot(500,this,[=](){
-            musicControl->mainMusic->stop();
+            musicControl.mainMusic->stop();
             emit back();
-            musicControl->gameBegin->setLoops(10000);
-            musicControl->gameBegin->play();
+            //musicControl.gameBegin->setLoops(10000);
+            musicControl.gameBegin->play();
             if(!timerFastKilled)
                 killTimer(timerFast);
             killTimer(timerNormal);
@@ -85,18 +88,20 @@ void MainScene::SetButtons()
     pauseBtn->setParent(this);
     pauseBtn->move(0.945*this->width()-50,0.89*this->height());
     connect(pauseBtn,&MyButton::clicked,[=](){
+        musicControl.ButtonClicked->play();
+//         qDebug()<<"called";
         pauseBtn->ZoomUp();
         pauseBtn->ZoomDown();
         QTimer::singleShot(500,this,[=](){
+            musicControl.mainMusic->stop();
             killTimer(timerNormal);
             if(!timerFastKilled)
                 killTimer(timerFast);
             timerFastKilled=true;
-            //关闭计时器，暂停音乐，实现暂停
-            musicControl->mainMusic->stop();
             pauseScene.setParent(this);
             pauseScene.move(0.5*this->width()-0.5*pauseScene.width(),0.5*this->height()-0.5*pauseScene.height());
             pauseScene.open();
+            //关闭计时器，暂停音乐，实现暂停
         });
     });
     //继续
@@ -105,14 +110,16 @@ void MainScene::SetButtons()
         timerNormal=startTimer(25);
         //重新开启计时器
         //继续播放音乐
-        musicControl->mainMusic->setLoops(10000);
-        musicControl->mainMusic->play();
+        musicControl.mainMusic->setLoops(10000);
+        musicControl.mainMusic->play();
+//        musicControl.mainMusic->stop();
     });
     //实现音乐设置按钮
     MyButton*musicBtn=new MyButton(":/Image/musicBtn.png");
     musicBtn->setParent(this);
     musicBtn->move(0.945*this->width()-100,0.89*this->height());
     connect(musicBtn,&MyButton::clicked,[=](){
+        musicControl.ButtonClicked->play();
         musicBtn->ZoomUp();
         musicBtn->ZoomDown();
         QTimer::singleShot(500,this,[=](){//还未想好，考虑加音量条从而做到音量可调，后期将调整music.h
