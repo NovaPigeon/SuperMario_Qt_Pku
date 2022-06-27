@@ -5,6 +5,7 @@
 #include"mario.h"
 #include"brick.h"
 #include"pipe.h"
+#include<music.h>
 class Monster
 {
 public:
@@ -13,6 +14,7 @@ public:
     Brick* brick;
     Pipe* pipe;
     QVector<QVector<int> >mp;
+    Music musicControl;
     void MonsterMove();//移动
 };
 

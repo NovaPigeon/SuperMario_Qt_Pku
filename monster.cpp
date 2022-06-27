@@ -53,6 +53,8 @@ void Monster::MonsterMove()
             {
                 *state=1;//monster变为被踩扁的状态
                 *dieState=1;//死亡计时
+                if(!Music::isOnMute)
+                      musicControl.beatEnemy->play();
                 mario->isJumpEnd=false;
                 mario->jumpHeight=19;//起跳
                 mario->score+=15;

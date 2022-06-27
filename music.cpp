@@ -1,3 +1,4 @@
+////////音效控制////////
 #include "music.h"
 //#include<gamebeginwindow.h>
 
@@ -25,5 +26,5 @@ Music::Music(QWidget *parent) : QWidget(parent)
     mainMusic->setSource(QUrl::fromLocalFile(":/Music/mainmusic.wav"));
     ButtonClicked=new QSoundEffect;
     ButtonClicked->setSource(QUrl::fromLocalFile(":/Music/clicked.wav"));
-    isOnMute=false;
 }
+bool Music::isOnMute=false;

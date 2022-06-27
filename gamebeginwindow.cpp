@@ -31,7 +31,8 @@ gameBeginWindow::gameBeginWindow(QWidget *parent) :
             this->hide();
             mainScene.show();
             mainScene.musicControl.mainMusic->setLoopCount(10000);//无限循环
-            mainScene.musicControl.mainMusic->setVolume(mainScene.musicControl.isOnMute?0:1);
+//            qDebug()<<mainScene.musicControl.isOnMute;
+            mainScene.musicControl.mainMusic->setVolume(Music::isOnMute?0.0f:1.0f);
             mainScene.musicControl.mainMusic->play();
             mainScene.timerNormal=mainScene.startTimer(25);//开始计时
         });

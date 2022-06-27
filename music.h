@@ -23,7 +23,7 @@ public:
     QSoundEffect*getCoin;
     QSoundEffect*mainMusic;
     QSoundEffect*ButtonClicked;
-    bool isOnMute;//静音状态标记
+    static bool isOnMute;//静音状态标记
 signals:
 
 public slots:

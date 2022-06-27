@@ -23,14 +23,15 @@ void MainScene::SetPauseScene()
     continueBtn->setParent(&pauseScene);
     continueBtn->move(0.5*pauseScene.width()-0.5*continueBtn->width(),0.1*pauseScene.height());
     connect(continueBtn,&MyButton::clicked,[=](){
-        musicControl.ButtonClicked->play();
+        if(!Music::isOnMute)
+            musicControl.ButtonClicked->play();
         continueBtn->ZoomUp();
         continueBtn->ZoomDown();
-        musicControl.mainMusic->setVolume(musicControl.isOnMute?0.0f:1.0f);
+//        musicControl.mainMusic->setVolume(musicControl.isOnMute?0.0f:1.0f);
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
         QTimer::singleShot(500,this,[=](){
             //继续播放音乐
-            musicControl.mainMusic->setVolume(musicControl.isOnMute?0.0f:1.0f);
+            musicControl.mainMusic->setVolume(Music::isOnMute?0.0f:1.0f);
             emit pauseScene.back();
         });
     });
@@ -40,7 +41,8 @@ void MainScene::SetPauseScene()
     exitBtn->move(0.5*pauseScene.width()-0.5*exitBtn->width(),0.5*pauseScene.height());
     connect(exitBtn,&MyButton::clicked,
             [=](){
-        musicControl.ButtonClicked->play();
+        if(!Music::isOnMute)
+              musicControl.ButtonClicked->play();
         exitBtn->ZoomUp();
         exitBtn->ZoomDown();
         //先暂停0.5s，弹出一个是否选择退出的问题对话框
@@ -68,7 +70,8 @@ void MainScene::SetButtons()
     backBtn->setParent(this);
     backBtn->move(0.945*this->width(),0.89*this->height());
     connect(backBtn,&MyButton::clicked,[=](){
-        musicControl.ButtonClicked->play();
+        if(!Music::isOnMute)
+            musicControl.ButtonClicked->play();
         backBtn->ZoomUp();
         backBtn->ZoomDown();
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
@@ -76,7 +79,8 @@ void MainScene::SetButtons()
             musicControl.mainMusic->stop();
             emit back();
             //musicControl.gameBegin->setLoops(10000);
-            musicControl.gameBegin->play();
+            if(!Music::isOnMute)
+                musicControl.gameBegin->play();
             if(!timerFastKilled)
                 killTimer(timerFast);
             killTimer(timerNormal);
@@ -87,7 +91,8 @@ void MainScene::SetButtons()
     pauseBtn->setParent(this);
     pauseBtn->move(0.945*this->width()-50,0.89*this->height());
     connect(pauseBtn,&MyButton::clicked,[=](){
-        musicControl.ButtonClicked->play();
+        if(!Music::isOnMute)
+            musicControl.ButtonClicked->play();
 //         qDebug()<<"called";
         pauseBtn->ZoomUp();
         pauseBtn->ZoomDown();
@@ -115,16 +120,17 @@ void MainScene::SetButtons()
     musicBtn->setParent(this);
     musicBtn->move(0.945*this->width()-100,0.89*this->height());
     connect(musicBtn,&MyButton::clicked,[=](){
-        musicControl.ButtonClicked->play();
+        if(!Music::isOnMute)
+              musicControl.ButtonClicked->play();
         musicBtn->ZoomUp();
         musicBtn->ZoomDown();
-        if(musicControl.isOnMute==false){
+        if(Music::isOnMute==false){
             musicControl.mainMusic->setVolume(0.0f);
-            musicControl.isOnMute=true;
+            Music::isOnMute=true;
         }
         else{
             musicControl.mainMusic->setVolume(1.0f);
-            musicControl.isOnMute=false;
+            Music::isOnMute=false;
         }
 //        QTimer::singleShot(500,this,[=](){
 //        });
@@ -271,6 +277,11 @@ void MainScene::timerEvent(QTimerEvent *event)
         mushroom->MushroomMove();
         monster->MonsterMove();
         brick->BrickStateChange();
+        if(!musicControl.isOnMute){
+            musicControl.mainMusic->setVolume(0.0f);
+            musicControl.die->play();
+            musicControl.mainMusic->setVolume(1.0f);
+        }
         key="NULL";
         time+=0.025;
         update();
@@ -376,14 +387,19 @@ void MainScene::CollisionCheckJumpUp()
                     mario->score+=5;
                     if(brickType==1)//顶破有金币的砖块
                     {
+                        if(!Music::isOnMute)
+                            musicControl.breakBrick->play();
                         mario->score+=5;
                         *(it->begin()+4)=1;//使金币被顶起
                     }
                     mario->jumpHeight=0;//开始下落
                     mario->y=brickY;
                     *(it->begin()+3)=0;
-                    if(*(it->begin()+2)==1)
+                    if(*(it->begin()+2)==1){
                         coinNum++;
+                        if(!Music::isOnMute)
+                            musicControl.getCoin->play();
+                    }
                     return;
                 }
                 if(brickState==0&&brickType!=0)
@@ -466,7 +482,6 @@ void MainScene::CollisionCheckJumpDown()
             }
         }
     }
-
 }
 //水平移动碰撞检测
 void MainScene::CollisionCheckMove()
@@ -546,6 +561,7 @@ void MainScene::CollisionCheckMove()
 //处理游戏结束的弹窗
 void MainScene::GameOver()
 {
+//    musicControl.mainMusic->stop();
     if(abs((castle->x-mario->x+100)-mario->windowX-20)<=50 && abs(castle->y+195-mario->y-45)<=50)
         isWin=true;
     if(mario->isGameOver||isWin)
@@ -554,10 +570,16 @@ void MainScene::GameOver()
             killTimer(timerFast);
         killTimer(timerNormal);
         QString text;
-        if(isWin)
+        if(isWin){
             text="\tYou Win!\nSpend "+QString::number(time,'f',1)+" seconds \nScore "+QString::number(mario->score,'f',0)+" points!";
-        else
+            if(!Music::isOnMute)
+                musicControl.finish->play();
+        }
+        else{
             text="You Lost!\nSorry!";
+            if(!Music::isOnMute)
+                musicControl.fail->play();//可能会与死亡音效交叠
+        }
         gameoverScene.label.setText(text);//设置文字
         gameoverScene.label.adjustSize();//设置自动尺寸
         gameoverScene.label.move((gameoverScene.width()-gameoverScene.label.width())/2,gameoverScene.height()*0.2);//设置label居中位置
@@ -565,6 +587,7 @@ void MainScene::GameOver()
             gameoverScene.setParent(this);
             gameoverScene.move(0.5*this->width()-0.5*gameoverScene.width(),0.5*this->height()-gameoverScene.height()*0.5);
             gameoverScene.open();
+            musicControl.mainMusic->stop();
             //qDebug()<<gameoverScene.Info;
         });
 
@@ -579,6 +602,8 @@ void MainScene::SetGameOverScene()
     exitGGBtn->move(0.5*gameoverScene.width()-0.5*exitGGBtn->width(),0.7*gameoverScene.height());
     connect(exitGGBtn,&MyButton::clicked,
             [=](){
+        if(!Music::isOnMute)
+            musicControl.ButtonClicked->play();
         exitGGBtn->ZoomUp();
         exitGGBtn->ZoomDown();
         //先暂停0.5s，弹出一个是否选择退出的问题对话框
@@ -601,6 +626,8 @@ void MainScene::SetGameOverScene()
     restartBtn->setParent(&gameoverScene);
     restartBtn->move(0.5*gameoverScene.width()-0.5*restartBtn->width(),0.5*gameoverScene.height());
     connect(restartBtn,&MyButton::clicked,[=](){
+        if(!Music::isOnMute)
+            musicControl.ButtonClicked->play();
         restartBtn->ZoomUp();
         restartBtn->ZoomDown();
         //先实现按钮弹跳特效，而后等待0.5s后发送back()信号
@@ -613,6 +640,10 @@ void MainScene::SetGameOverScene()
         timerNormal=startTimer(25);
         //重新开启计时器
         SetWholeGame();
+        musicControl.mainMusic->stop();
+        musicControl.mainMusic->setLoopCount(QSoundEffect::Infinite);
+        musicControl.mainMusic->setVolume(Music::isOnMute?0.0f:1.0f);
+        musicControl.mainMusic->play();
     });
 }
 MainScene::~MainScene()
