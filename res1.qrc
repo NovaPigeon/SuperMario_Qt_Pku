@@ -3,6 +3,7 @@
         <file>Music/beatenemy.wav</file>
         <file>Music/bloodrewarding.wav</file>
         <file>Music/breakbrick.wav</file>
+        <file>Music/clicked.wav</file>
         <file>Music/die.wav</file>
         <file>Music/eatmushroom.wav</file>
         <file>Music/fail.wav</file>
@@ -12,6 +13,5 @@
         <file>Music/getcoin.wav</file>
         <file>Music/mainmusic.wav</file>
         <file>Music/sparemainmusic.wav</file>
-        <file>Music/clicked.wav</file>
     </qresource>
 </RCC>

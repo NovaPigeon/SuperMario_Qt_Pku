@@ -1,6 +1,7 @@
 #include "gamebeginwindow.h"
 #include <QApplication>
 #include <QSplashScreen>
+#include<QSlider>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -12,6 +13,5 @@ int main(int argc, char *argv[])
     gameBeginWindow w;
     QTimer::singleShot(500,splash,SLOT(close()));
     QTimer::singleShot(1000,&w,SLOT(show()));
-
     return a.exec();
 }

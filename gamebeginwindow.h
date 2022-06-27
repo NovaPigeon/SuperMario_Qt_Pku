@@ -4,7 +4,6 @@
 
 #include <QMainWindow>
 #include<QEvent>
-#include<mainscene.h>
 #include<aboutscene.h>
 #include<mybutton.h>
 #include<mainscene.h>
@@ -29,6 +28,7 @@ public:
     void paintEvent(QPaintEvent* ev);
     //音效控制
     Music musicControl;
+
 
 private:
     Ui::gameBeginWindow *ui;

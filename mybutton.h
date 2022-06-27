@@ -10,7 +10,6 @@
 #include<QEvent>
 #include<QTimer>
 #include<QDebug>
-
 class MyButton : public QPushButton
 {
     Q_OBJECT
@@ -20,7 +19,6 @@ public:
     MyButton(QString InitImg,QString EndImg="");
     void ZoomUp();
     void ZoomDown();//按钮弹起、落下
-
 private:
     QString InitImgPath;//初始图片路径
     QString EndImgPath;//按下后显示图片路径，构造时默认为空

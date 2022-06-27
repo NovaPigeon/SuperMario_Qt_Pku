@@ -14,6 +14,7 @@
 #include<QKeyEvent>
 #include<QDialog>
 #include<QLabel>
+#include<QSound>//多媒体模块下的音效头文件
 #include"pausescene.h"
 #include"brick.h"
 #include"castle.h"
@@ -41,14 +42,13 @@ public:
     Monster* monster;
     Mushroom* mushroom;//游戏画面各组成要素
     Music musicControl;//游戏音乐音效
-
     int timerNormal;
     int timerFast;//两个计时器的编号，Fast用于加速，Normal用于常规绘图
     double time;//计算通关时间
     bool gameProgress;//判断游戏是否正在进行
     bool timerFastKilled;//判断加速计时器是否开启
     bool isWin;//用于判断游戏是否胜利
-    int score;//用于记录游戏得分
+    int coinNum;//记录游戏所得金币数
     QString key;//用于记录键盘事件，当移动时为“left/right”，不移动时为“NULL”，以与mario->direction区分，后者记录的是mario的朝向
     explicit MainScene(QWidget *parent = 0);
     ~MainScene();

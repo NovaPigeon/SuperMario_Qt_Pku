@@ -36,5 +36,7 @@
         <file>Image/unknownbrick.png</file>
         <file>Image/unknownbrickafter.png</file>
         <file>Image/openScene.png</file>
+        <file>Image/monsterleft.png</file>
+        <file>Image/monsterright.png</file>
     </qresource>
 </RCC>

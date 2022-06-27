@@ -14,7 +14,6 @@ class PauseScene : public QDialog
 public:
     PauseScene();
     void paintEvent(QPaintEvent *event);
-
 signals:
     void back();
 public slots:

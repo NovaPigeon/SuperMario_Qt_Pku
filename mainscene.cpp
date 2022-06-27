@@ -1,7 +1,6 @@
 ////////////游戏主界面////////////
 #include "mainscene.h"
 #include "ui_mainscene.h"
-#include<QDebug>
 MainScene::MainScene(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainScene)
@@ -9,6 +8,7 @@ MainScene::MainScene(QWidget *parent) :
     ui->setupUi(this);
     this->setFixedSize(1000,500);
     this->setWindowTitle("SuperMario");
+
     SetGameOverScene();
     SetWholeGame();
     SetPauseScene();
@@ -130,20 +130,22 @@ void MainScene::SetButtons()
 //        });
     });
 }
+
 void MainScene::SetWholeGame()
 {
     brick=new Brick;
     castle=new Castle;
     mario=new Mario;
     pipe=new Pipe;
-    monster=new Monster;
+    monster=new Monster(mario,brick,pipe);
     mushroom=new Mushroom;//游戏画面各组成要素
     gameProgress=true;//判断游戏是否正在进行
-    timerFastKilled=false;//判断加速计时器是否开启
+    timerFastKilled=true;//判断加速计时器是否开启
     time=0;
     isWin=false;
     key="NULL";
-    score=0;
+    mario->score=0;
+    coinNum=0;
 }
 //重写paintEvent事件
 void MainScene::paintEvent(QPaintEvent *event)
@@ -160,7 +162,8 @@ void MainScene::paintEvent(QPaintEvent *event)
     QPixmap pixUnknownBrickAfter(":/Image/unknownbrickafter.png");//被mario顶破后的问号砖
     QPixmap pixNormalBrick(":/Image/normalbrick.png");//普通砖块
     QPixmap pixMushroom(":/Image/mushroom.png");//蘑菇
-    QPixmap pixMounster(":/Image/mounster.png");//怪物
+    QPixmap pixMonsterLeft(":/Image/monsterleft.png");//怪物
+    QPixmap pixMonsterRight(":/Image/monsterright.png");
     QPixmap pixLongPipe(":/Image/longpipe.png");//长水管
     QPixmap pixShortPipe(":/Image/shortpipe.png");//短水管
     QPixmap pixCasle(":/Image/castle.png");//城堡/终点
@@ -173,7 +176,9 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制生命值
     painter.drawText(10,60,"LIFE:"+QString::number(mario->life,'f',0));
     //绘制得分
-    painter.drawText(10,90,"SCORE:"+QString::number(score,'f',0));
+    painter.drawText(10,90,"SCORE:"+QString::number(mario->score,'f',0));
+    //绘制得金币数
+    painter.drawText(10,120,"COIN:"+QString::number(coinNum,'f',0));
     //绘制地面
     painter.drawPixmap(-5,450,pixGround,mario->goundState,0,1005,50);//截取自goundX始长1000pix的图片，以营造出动画效果
     //绘制砖块
@@ -204,15 +209,40 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制casle/终点
     if(castle->x-mario->x>-100 && castle->x-mario->x<1000)
         painter.drawPixmap(castle->x-mario->x,castle->y,pixCasle.width(),pixCasle.height(),pixCasle);
+    //绘制monster
+    for(QVector < QVector < int >> ::iterator it=monster->mp.begin();it!=monster->mp.end();it++)
+    {
+        int monsterX=*(it->begin()),
+                monsterState=*(it->begin()+1),
+                monsterDirection=*(it->begin()+2);
+                //monsterDieState=*(it->begin()+3);
+        if(monsterX-mario->x>-100 && monsterX-mario->x<1000)
+        {
+            if(monsterState==2)
+            {
+                if(monsterDirection==0)
+                    painter.drawPixmap(monsterX-mario->x,500-pixGround.height()-pixMonsterLeft.height(),pixMonsterLeft);
+                else
+                    painter.drawPixmap(monsterX-mario->x,500-pixGround.height()-pixMonsterRight.height(),pixMonsterRight);
+            }
+            else if(monsterState==1)
+            {
+                if(monsterDirection==0)
+                    painter.drawPixmap(monsterX-mario->x,500-pixGround.height()-pixMonsterLeft.height()*0.5,pixMonsterLeft.width(),pixMonsterLeft.height()*0.5,pixMonsterLeft);
+                else
+                    painter.drawPixmap(monsterX-mario->x,500-pixGround.height()-pixMonsterRight.height()*0.5,pixMonsterRight.width(),pixMonsterRight.height()*0.5,pixMonsterRight);
+            }
+        }
+    }
     //绘制mario
-    if(!mario->isDie)
+    if(!mario->isDie && mario->invincibleState%2==0 && !isWin)//无敌帧时mario会闪烁，普通情况下invi*恒为
     {
         if(mario->direction=="left")
             painter.drawPixmap(mario->windowX,mario->y,pixMarioLeft,mario->walkState,0,45,45);//朝向为左
         else if(mario->direction=="right")
             painter.drawPixmap(mario->windowX,mario->y,pixMarioRight,mario->walkState,0,45,45);//朝向为右
     }
-    else
+    else if(mario->isDie)
     {
         painter.drawPixmap(mario->windowX,mario->y,pixMarioDie,mario->dieState,0,45,45);
     }
@@ -224,6 +254,10 @@ void MainScene::timerEvent(QTimerEvent *event)
     if(timerid==timerNormal&&mario->isDie)//如果mario死亡，则实现其死亡画面
     {
         mario->MarioDie();
+        mushroom->MushroomMove();
+        monster->MonsterMove();
+        brick->BrickStateChange();
+        key="NULL";
         time+=0.025;
         update();
         return;
@@ -231,6 +265,7 @@ void MainScene::timerEvent(QTimerEvent *event)
     if(timerid==timerNormal)
     {
         GameOver();
+        mario->InvicibleSet();
         mario->MarioMove(key);
         mario->MarioJump();
         CollisionCheckJumpDown();
@@ -324,10 +359,14 @@ void MainScene::CollisionCheckJumpUp()
             {
                 if(brickState==1)
                 {
-                    score+=5;
+                    mario->score+=5;
+                    if(brickType==1)
+                        mario->score+=5;
                     mario->jumpHeight=0;//开始下落
                     mario->y=brickY;
                     *(it->begin()+3)=0;
+                    if(*(it->begin()+2)==1)
+                        coinNum++;
                     return;
                 }
                 if(brickState==0&&brickType!=0)
@@ -499,15 +538,15 @@ void MainScene::GameOver()
         killTimer(timerNormal);
         QString text;
         if(isWin)
-            text="\tYou Win!\nSpend "+QString::number(time,'f',1)+" seconds \nEarn "+QString::number(score,'f',0)+" coins!";
+            text="\tYou Win!\nSpend "+QString::number(time,'f',1)+" seconds \nScore "+QString::number(mario->score,'f',0)+" points!";
         else
-           text="You Lost!\nSorry!";
+            text="You Lost!\nSorry!";
         gameoverScene.label.setText(text);//设置文字
         gameoverScene.label.adjustSize();//设置自动尺寸
         gameoverScene.label.move((gameoverScene.width()-gameoverScene.label.width())/2,gameoverScene.height()*0.2);//设置label居中位置
         QTimer::singleShot(500,this,[=](){
             gameoverScene.setParent(this);
-            gameoverScene.move(0.5*this->width()-0.5*gameoverScene.width(),0.5*this->height()-0.5*gameoverScene.height());
+            gameoverScene.move(0.5*this->width()-0.5*gameoverScene.width(),0.5*this->height()-gameoverScene.height()*0.5);
             gameoverScene.open();
             //qDebug()<<gameoverScene.Info;
         });
@@ -561,9 +600,9 @@ void MainScene::SetGameOverScene()
 }
 MainScene::~MainScene()
 {
-    killTimer(timerNormal);
-    if(!timerFastKilled)
-        killTimer(timerFast);
+//    killTimer(timerNormal);
+//    if(!timerFastKilled)
+//        killTimer(timerFast);
     delete ui;
     delete brick;
     delete castle;

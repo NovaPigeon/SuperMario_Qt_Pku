@@ -1,6 +1,5 @@
 /////////游戏的暂停菜单////////
 #include "pausescene.h"
-
 PauseScene::PauseScene()
 {
     //设置固定的窗口大小

@@ -9,7 +9,7 @@ Mario::Mario()
     goundState=0;//地面的状态
     walkState=0;//mario运动的状态
     jumpHeight=20;//mario跳跃距离
-    life=3;//mario的生命值
+    life=5;//mario的生命值
     isDie=false;//mario是否死亡
     direction="right";//mario运动的方向，左还是右
     isJump=false;//判断空格是否被按下
@@ -17,7 +17,10 @@ Mario::Mario()
     isSpaceRelease=true;//判断空格是否被松开，以检测滞空时间
     canMove=true;//能否移动，用于mario的碰撞检测
     dieState=0;//播放死亡动画时的状态
+    invincibleState=0;//无敌帧的情况
+    isInvicible=false;
     isGameOver=false;
+    score=0;
 }
 void Mario::MarioJump()//弹跳
 {
@@ -61,7 +64,7 @@ void Mario::MarioMove(QString key)//水平移动,如果直接调用direction的�
         windowX+=5;
         walkState+=57;
     }
-    else if(/*(key=="left"&&x<30)||*/(key!="NULL"&&!canMove))//mario处于屏幕最左侧或者被卡着不动时，mario姿势变化，位置不变
+    else if((key=="left"&&x<30)||(key!="NULL"&&!canMove))//mario处于屏幕最左侧或者被卡着不动时，mario姿势变化，位置不变
     {
         walkState+=57;
     }
@@ -99,7 +102,21 @@ void Mario::MarioDie()//播放mario的死亡动画
             dieState=0;
             isDie=false;
             life--;
-            isGameOver=true;
+            if(life==0)
+                isGameOver=true;
+            invincibleState=1;//无敌帧的初始化
+            isInvicible=true;
         }
      }
+}
+void Mario::InvicibleSet()
+{
+    if(invincibleState==100)
+    {
+        invincibleState=0;
+        isInvicible=false;
+        return;
+    }
+    if(isInvicible)
+        invincibleState++;
 }

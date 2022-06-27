@@ -12,18 +12,18 @@ class Music : public QWidget
     Q_OBJECT
 public:
     explicit Music(QWidget *parent = 0);
-   QSoundEffect*beatEnemy;
-   QSoundEffect*bloodRewarding;
-   QSoundEffect*breakBrick;
-   QSoundEffect*die;
-   QSoundEffect*eatMushroom;
-   QSoundEffect*fail;
-   QSoundEffect*finish;
-   QSoundEffect*gameBegin;
-   QSoundEffect*getCoin;
-   QSoundEffect*mainMusic;
-   QSoundEffect*ButtonClicked;
-   bool isOnMute;//静音状态标记
+    QSoundEffect*beatEnemy;
+    QSoundEffect*bloodRewarding;
+    QSoundEffect*breakBrick;
+    QSoundEffect*die;
+    QSoundEffect*eatMushroom;
+    QSoundEffect*fail;
+    QSoundEffect*finish;
+    QSoundEffect*gameBegin;
+    QSoundEffect*getCoin;
+    QSoundEffect*mainMusic;
+    QSoundEffect*ButtonClicked;
+    bool isOnMute;//静音状态标记
 signals:
 
 public slots:
