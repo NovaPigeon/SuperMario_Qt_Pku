@@ -167,6 +167,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     QPixmap pixLongPipe(":/Image/longpipe.png");//长水管
     QPixmap pixShortPipe(":/Image/shortpipe.png");//短水管
     QPixmap pixCasle(":/Image/castle.png");//城堡/终点
+    QPixmap pixCoin(":/Image/coin.png");//金币
     //设置字体
     painter.setFont(QFont("Times",25,QFont::Black));
     //绘制背景图
@@ -192,6 +193,19 @@ void MainScene::paintEvent(QPaintEvent *event)
                 painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1),pixUnknownBrick,brick->unknownState,0,50,40);
             if(*(it->begin()+2)!=0 && *(it->begin()+3)==0)//如果该砖块是未知砖块且已被破坏
                 painter.drawPixmap(*(it->begin()) - mario->x, *(it->begin() + 1), pixUnknownBrickAfter);
+        }
+    }
+    //绘制金币
+    for (QVector < QVector < int >> ::iterator it = brick->mp.begin(); it != brick->mp.end();it++)
+    {
+        if (*(it->begin()) - mario->x > -50 && *(it->begin()) - mario->x < 1000)
+        {
+            if(*(it->begin()+2)==1 && *(it->begin()+4)!=0)//如果该砖块带金币且已被顶起
+                painter.drawPixmap(*(it->begin())-mario->x+10,//该砖块的x坐标
+                                   *(it->begin() +1)-pixCoin.height()-*(it->begin()+4)*10,//该砖块的y坐标再减去升起的距离
+                                   pixCoin,
+                                   *(it->begin()+4)*30,0,30,33
+                                   );
         }
     }
     //绘制水管
@@ -360,8 +374,11 @@ void MainScene::CollisionCheckJumpUp()
                 if(brickState==1)
                 {
                     mario->score+=5;
-                    if(brickType==1)
+                    if(brickType==1)//顶破有金币的砖块
+                    {
                         mario->score+=5;
+                        *(it->begin()+4)=1;//使金币被顶起
+                    }
                     mario->jumpHeight=0;//开始下落
                     mario->y=brickY;
                     *(it->begin()+3)=0;
