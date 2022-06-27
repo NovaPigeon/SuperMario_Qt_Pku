@@ -61,8 +61,8 @@ void Monster::MonsterMove()
             //mario触碰到monster，失去一条命，触发无敌帧
             if(mario->y==500-50-45//mario站在地面上
                     && !mario->isInvicible//mario不处于无敌状态
-                    && ((mario->windowX+35>=monsterWindowX && mario->windowX+25<=monsterWindowX)
-                    || (mario->windowX<=monsterWindowX+35 && mario->windowX>=monsterWindowX+25))
+                    && mario->windowX+35>=monsterWindowX
+                    && mario->windowX<=monsterWindowX+35
                     )
             {
                 mario->isDie=true;
