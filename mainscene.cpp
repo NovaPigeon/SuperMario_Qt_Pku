@@ -207,7 +207,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     }
 
     //绘制casle/终点
-    if(castle->x-mario->x>-100 && castle->x-mario->x<1000)
+    if(castle->x-mario->x>-300 && castle->x-mario->x<1000)
         painter.drawPixmap(castle->x-mario->x,castle->y,pixCasle.width(),pixCasle.height(),pixCasle);
     //绘制monster
     for(QVector < QVector < int >> ::iterator it=monster->mp.begin();it!=monster->mp.end();it++)
