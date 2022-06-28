@@ -6,20 +6,20 @@ Monster::Monster(Mario* mario_,Brick* brick_,Pipe* pipe_)
     mario=mario_;
     brick=brick_;
     pipe=pipe_;
-    int m[4]={500,2500,2600,2700};//monster只在地面上有
-    QVector<int>v;
-    for(int i=0;i<4;++i)
-    {
-        v.push_back(m[i]);
-        v.push_back(2);//2代表尚未被踩，1代表被踩了但还没播放被踩扁的动画，0代表已播放被踩扁的动画，消失
-        v.push_back(1);//0代表朝左，1代表朝右
-        v.push_back(0);//monster's dieState
-        mp.push_back(v);
-        v.clear();
-    }
-    //    qDebug()<<mario->direction;
-    //    for(QVector<QVector<int> >::iterator itp=pipe->mp.begin();itp!=pipe->mp.end();itp++)
-    //        qDebug()<<*(itp->begin());
+    int m[15]={650,950,1200,2030,2600,3300,3800,4140,5200,5900,6040,6180,6300,7000,7440};//monster只在地面上有
+        QVector<int>v;
+        for(int i=0;i<15;++i)
+        {
+            v.push_back(m[i]);
+            v.push_back(2);//2代表尚未被踩，1代表被踩了但还没播放被踩扁的动画，0代表已播放被踩扁的动画，消失
+            v.push_back(1);//0代表朝左，1代表朝右
+            v.push_back(0);//monster's dieState
+            mp.push_back(v);
+            v.clear();
+        }
+        //    qDebug()<<mario->direction;
+        //    for(QVector<QVector<int> >::iterator itp=pipe->mp.begin();itp!=pipe->mp.end();itp++)
+        //        qDebug()<<*(itp->begin());
 }
 void Monster::MonsterMove()
 {

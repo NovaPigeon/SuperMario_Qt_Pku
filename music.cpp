@@ -21,7 +21,7 @@ Music::Music(QWidget *parent) : QWidget(parent)
     gameBegin=new QSoundEffect;
     gameBegin->setSource(QUrl::fromLocalFile(":/Music/gamebegin.wav"));
     getCoin=new QSoundEffect;
-    getCoin->setSource(QUrl::fromLocalFile(":/Music/getcoin.wav"));
+    getCoin->setSource(QUrl::fromLocalFile(":/Music/bloodrewarding.wav"));
     mainMusic=new QSoundEffect;
     mainMusic->setSource(QUrl::fromLocalFile(":/Music/mainmusic.wav"));
     ButtonClicked=new QSoundEffect;
