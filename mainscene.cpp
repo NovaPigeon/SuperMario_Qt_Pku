@@ -166,7 +166,6 @@ void MainScene::paintEvent(QPaintEvent *event)
     QPixmap pixUnknownBrick(":/Image/unknownbrick.png");//问号砖
     QPixmap pixUnknownBrickAfter(":/Image/unknownbrickafter.png");//被mario顶破后的问号砖
     QPixmap pixNormalBrick(":/Image/normalbrick.png");//普通砖块
-    QPixmap pixMushroom(":/Image/mushroom.png");//蘑菇
     QPixmap pixMonsterLeft(":/Image/monsterleft.png");//怪物
     QPixmap pixMonsterRight(":/Image/monsterright.png");
     QPixmap pixLongPipe(":/Image/longpipe.png");//长水管
