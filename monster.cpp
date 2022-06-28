@@ -49,7 +49,7 @@ void Monster::MonsterMove()
             //mario踩扁monster，并弹跳起
             if(mario->windowX+35>=monsterWindowX && mario->windowX<=monsterWindowX+35 //x坐标约束
                     && mario->y<=500-50-40 && mario->y>=500-50-40-40 && //y坐标约束
-                    !mario->isJumpEnd && mario->jumpHeight<=0)//在下落过程中
+                    mario->jumpHeight<=0)//在下落过程中
             {
                 *state=1;//monster变为被踩扁的状态
                 *dieState=1;//死亡计时
