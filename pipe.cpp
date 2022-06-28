@@ -28,7 +28,7 @@ Pipe::Pipe()
     QVector<int> v;
     for(int i=0;i<17;++i)
     {
-        v.push_back(arr[i][0]);
+        v.push_back(arr[i][0]+500);
         v.push_back(arr[i][1]);
         mp.push_back(v);
         v.clear();

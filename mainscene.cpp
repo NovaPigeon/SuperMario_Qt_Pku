@@ -143,8 +143,7 @@ void MainScene::SetWholeGame()
     castle=new Castle;
     mario=new Mario;
     pipe=new Pipe;
-    monster=new Monster(mario,brick,pipe);
-    mushroom=new Mushroom;//游戏画面各组成要素
+    monster=new Monster(mario,brick,pipe);//游戏画面各组成要素
     gameProgress=true;//判断游戏是否正在进行
     timerFastKilled=true;//判断加速计时器是否开启
     time=0;
@@ -274,7 +273,6 @@ void MainScene::timerEvent(QTimerEvent *event)
     if(timerid==timerNormal&&mario->isDie)//如果mario死亡，则实现其死亡画面
     {
         mario->MarioDie();
-        mushroom->MushroomMove();
         monster->MonsterMove();
         brick->BrickStateChange();
         if(!musicControl.isOnMute){
@@ -296,7 +294,6 @@ void MainScene::timerEvent(QTimerEvent *event)
         CollisionCheckJumpDown();
         CollisionCheckJumpUp();
         CollisionCheckMove();
-        mushroom->MushroomMove();
         monster->MonsterMove();
         brick->BrickStateChange();
         time+=0.025;
@@ -657,6 +654,5 @@ MainScene::~MainScene()
     delete mario;
     delete pipe;
     delete monster;
-    delete mushroom;
 }
 

@@ -31,7 +31,6 @@ SOURCES += \
     aboutscene.cpp \
     mario.cpp \
     brick.cpp \
-    mushroom.cpp \
     pipe.cpp \
     castle.cpp \
     pausescene.cpp \
@@ -46,7 +45,6 @@ HEADERS += \
     aboutscene.h \
     mario.h \
     brick.h \
-    mushroom.h \
     pipe.h \
     castle.h \
     pausescene.h \

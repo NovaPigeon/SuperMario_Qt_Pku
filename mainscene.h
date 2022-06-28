@@ -21,7 +21,6 @@
 #include"mario.h"
 #include"pipe.h"
 #include"monster.h"
-#include"mushroom.h"
 #include"gameoverscene.h"
 #include"music.h"
 namespace Ui {
@@ -39,8 +38,7 @@ public:
     Castle* castle;
     Mario* mario;
     Pipe* pipe;
-    Monster* monster;
-    Mushroom* mushroom;//游戏画面各组成要素
+    Monster* monster;//游戏画面各组成要素
     Music musicControl;//游戏音乐音效
     int timerNormal;
     int timerFast;//两个计时器的编号，Fast用于加速，Normal用于常规绘图
