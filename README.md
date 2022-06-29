@@ -20,25 +20,25 @@
 
  进入游戏，首先弹出SuperMario的浮窗，浮窗悬停0.5秒后隐藏，显示游戏开始页面，并播放游戏开始音效。
 
-<div align=center><img src="image/pre/1656467393572.png" width="30%" height="30%" />
+<img src="image/pre/1656467393572.png" width="30%" height="30%" />
 
 ### 游戏开始界面
 
 游戏开始界面中包含三个按钮，分别为Start开始按钮，Exit退出按钮和关于按钮。在接下来的进程中，点击各按钮后都会播放音效和动画。
 
-<div align=center><img src="image/pre/1656469492329.png" width="50%" height="50%" />
+<img src="image/pre/1656469492329.png" width="50%" height="50%" />
 
 * Exit按钮
 
   * 点击Exit按钮，弹出对话框，询问是否退出游戏：其中点击Yes退出游戏，点击No则返回游戏。
 
-<div align=center><img src="image/pre/1656469547378.png" width="50%" height="50%" />
+<img src="image/pre/1656469547378.png" width="50%" height="50%" />
 
 * 关于按钮
 
   * 点击关于按钮会显示aboutScene的界面。该界面包含游戏指南和返回按钮，点击返回按钮则可回到开始界面。
 
-<div align=center><img src="image/pre/1656469523536.png" width="50%" height="50%" />
+<img src="image/pre/1656469523536.png" width="50%" height="50%" />
 
 * Start按钮
 
@@ -48,7 +48,7 @@
 
 进入游戏界面后，自动播放游戏背景音乐，并实时显示游戏数据。玩家可以通过键盘操纵Mario移动，并通过按钮控制游戏。
 
-<div align=center><img src="image/pre/1656470914819.png" width="50%" height="50%" />
+<img src="image/pre/1656470914819.png" width="50%" height="50%" />
 
 #### 游戏数据
 
@@ -64,7 +64,7 @@
   * 点击Exit按钮，弹出对话框，询问是否退出游戏：其中点击yes退出游戏，点击no则返回游戏。
   * 点击Continue按钮，继续游戏。
 
-    <div align=center><img src="image/pre/1656489615707.png" width="50%" height="50%" />
+    <img src="image/pre/1656489615707.png" width="50%" height="50%" />
 * 返回按钮。点击返回按钮，返回初始页面。在此过程中游戏暂停，音乐设置和游戏进程保留。
 
 #### 游戏控制与游玩
@@ -89,7 +89,8 @@ Mario可以与游戏内各元素进行交互。游戏内元素有：地面，普
     * Restart按钮：重新开始这局游戏。游戏复原为初始状态，各项数据清零。
     * Exit按钮：出现退出游戏的对话框。
 
-    <div align=center><img src="image/pre/1656494225636.png" width="50%" height="50%" />
+    <img src="image/pre/1656494225636.png" width="50%" height="50%" />
+    
   * Mario若在下落过程中触碰到怪物，则怪物被踩扁、死亡，Mario获得15分。
   * Mario击杀怪物或被怪物击杀时皆会播放相应音效。
 * 城堡。Mario若抵达城堡，则弹出游戏胜利界面，播放游戏胜利音乐，关闭游戏背景音乐，停止游戏进程。游戏胜利界面包含一段文字和两个按钮。
@@ -98,7 +99,7 @@ Mario可以与游戏内各元素进行交互。游戏内元素有：地面，普
   * Restart按钮：重新开始这局游戏。游戏复原为初始状态，各项数据清零。
   * Exit按钮：出现退出游戏的对话框。
 
-  <div align=center><img src="image/pre/1656494236763.png" width="50%" height="50%" />
+  <img src="image/pre/1656494236763.png" width="50%" height="50%" />
 
 ## 项目各模块与类设计细节
 
